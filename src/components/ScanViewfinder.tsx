@@ -1,9 +1,9 @@
 import { View, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, SharedValue } from 'react-native-reanimated';
 import { COLORS } from '@/theme/theme';
 
 type Props = {
-  scanLineOffset: Animated.SharedValue<number>;
+  scanLineOffset: SharedValue<number>;
   isScanning: boolean;
   viewfinderHeight: number;
 };
