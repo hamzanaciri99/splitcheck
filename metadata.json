@@ -1,0 +1,6 @@
+{
+  "name": "SplitCheck",
+  "description": "Frictionless split check and receipt scanner app using Jetpack Compose, Room database, and custom item-assignment UI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
