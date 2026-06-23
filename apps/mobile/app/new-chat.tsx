@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, Button, IconButton } from 'react-native-paper';
 import { router } from 'expo-router';
 import type { User } from '@splitcheck/core';
 import { api } from '@/api/client';
 import { useChatStore } from '@/store/useChatStore';
-import { COLORS } from '@splitcheck/ui';
+import { Button, IconButton, Icon, TextField } from '@splitcheck/ui';
 
 export default function NewChatScreen() {
   const { startConversation } = useChatStore();
@@ -35,66 +34,31 @@ export default function NewChatScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <IconButton icon="close" accessibilityLabel="Close" onPress={() => router.back()} />
-        <Text style={styles.title}>New Chat</Text>
+    <SafeAreaView className="flex-1 bg-canvas">
+      <View className="flex-row items-center px-1">
+        <IconButton accessibilityLabel="Close" onPress={() => router.back()}>
+          <Icon name="close" size={20} color="#F5F5F5" />
+        </IconButton>
+        <Text className="text-text-primary text-[17px] font-bold ml-1">New Chat</Text>
       </View>
 
-      <View style={styles.content}>
-        <Text style={styles.label}>Friend's email</Text>
-        <TextInput
-          mode="outlined"
+      <View className="p-5 gap-2">
+        <TextField
+          label="Friend's email"
           autoCapitalize="none"
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
-          style={styles.input}
         />
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Text className="text-negative text-[13px]">{error}</Text>}
 
-        <Button mode="contained" loading={busy} disabled={busy || !email} onPress={onSubmit} style={styles.button}>
-          Start Chat
-        </Button>
+        <View className="mt-3">
+          <Button variant="primary" fullWidth loading={busy} disabled={busy || !email} onPress={onSubmit}>
+            Start Chat
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 4,
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: COLORS.onBackground,
-  },
-  content: {
-    padding: 20,
-    gap: 8,
-  },
-  label: {
-    fontSize: 13,
-    color: COLORS.onSurfaceVariant,
-    marginBottom: 4,
-  },
-  input: {
-    backgroundColor: COLORS.surface,
-  },
-  button: {
-    borderRadius: 24,
-    marginTop: 12,
-  },
-  error: {
-    color: COLORS.error,
-    fontSize: 13,
-  },
-});

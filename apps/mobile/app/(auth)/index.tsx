@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import { COLORS } from '@splitcheck/ui';
+import { Button, Icon } from '@splitcheck/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useGoogleAuth } from '@/auth/useGoogleAuth';
 
@@ -25,22 +24,22 @@ export default function WelcomeScreen() {
   }, [response]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.content}>
+    <SafeAreaView className="flex-1 bg-canvas">
+      <View className="flex-1 justify-between px-6 pt-20 pb-8">
         <View>
-          <Text style={styles.title}>SplitCheck</Text>
-          <Text style={styles.subtitle}>
+          <Text className="text-text-primary text-[34px] font-extrabold mb-3">SplitCheck</Text>
+          <Text className="text-text-secondary text-[15px] leading-[22px]">
             Track shared checks with friends. No payments here — just keeping it fair.
           </Text>
         </View>
 
-        <View style={styles.actions}>
-          {error && <Text style={styles.error}>{error}</Text>}
+        <View className="gap-2">
+          {error && <Text className="text-negative text-[13px] mb-1 text-center">{error}</Text>}
 
           <Button
-            mode="contained"
-            icon="google"
-            style={styles.button}
+            variant="secondary"
+            fullWidth
+            icon={<Icon name="google" size={18} />}
             loading={busy}
             disabled={!isConfigured || !request || busy}
             onPress={() => promptAsync()}
@@ -49,14 +48,16 @@ export default function WelcomeScreen() {
           </Button>
 
           {!isConfigured && (
-            <Text style={styles.hint}>Google sign-in needs EXPO_PUBLIC_GOOGLE_CLIENT_ID configured.</Text>
+            <Text className="text-text-secondary text-[11px] text-center mb-1">
+              Google sign-in needs EXPO_PUBLIC_GOOGLE_CLIENT_ID configured.
+            </Text>
           )}
 
-          <Button mode="outlined" style={styles.button} onPress={() => router.push('/(auth)/login')}>
+          <Button variant="outline" fullWidth onPress={() => router.push('/(auth)/login')}>
             Sign in with email
           </Button>
 
-          <Button mode="text" onPress={() => router.push('/(auth)/signup')}>
+          <Button variant="ghost" fullWidth onPress={() => router.push('/(auth)/signup')}>
             Create an account
           </Button>
         </View>
@@ -64,46 +65,3 @@ export default function WelcomeScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingTop: 80,
-    paddingBottom: 32,
-  },
-  title: {
-    fontSize: 34,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: COLORS.onSurfaceVariant,
-    lineHeight: 22,
-  },
-  actions: {
-    gap: 8,
-  },
-  button: {
-    borderRadius: 24,
-  },
-  error: {
-    color: COLORS.error,
-    fontSize: 13,
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  hint: {
-    color: COLORS.onSurfaceVariant,
-    fontSize: 11,
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-});

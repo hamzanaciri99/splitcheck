@@ -7,6 +7,7 @@ type Props = PressableProps & {
   variant?: ButtonVariant;
   fullWidth?: boolean;
   loading?: boolean;
+  icon?: React.ReactNode;
 };
 
 const VARIANT_CONTAINER: Record<ButtonVariant, string> = {
@@ -38,6 +39,7 @@ export function Button({
   variant = 'primary',
   fullWidth,
   loading,
+  icon,
   disabled,
   className,
   style,
@@ -48,7 +50,7 @@ export function Button({
   return (
     <Pressable
       disabled={isDisabled}
-      className={`flex-row items-center justify-center rounded-full px-6 py-3.5 ${VARIANT_CONTAINER[variant]} ${
+      className={`flex-row items-center justify-center gap-2 rounded-full px-6 py-3.5 ${VARIANT_CONTAINER[variant]} ${
         fullWidth ? 'w-full' : ''
       } ${isDisabled ? 'opacity-40' : ''} ${className ?? ''}`}
       style={style}
@@ -57,7 +59,10 @@ export function Button({
       {loading ? (
         <ActivityIndicator size="small" color={VARIANT_SPINNER_COLOR[variant]} />
       ) : (
-        <Text className={`text-[15px] font-semibold ${VARIANT_TEXT[variant]}`}>{children}</Text>
+        <>
+          {icon}
+          <Text className={`text-[15px] font-semibold ${VARIANT_TEXT[variant]}`}>{children}</Text>
+        </>
       )}
     </Pressable>
   );

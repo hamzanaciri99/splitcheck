@@ -1,10 +1,8 @@
 import '../global.css';
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
-import { PaperProvider } from 'react-native-paper';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Sentry from '@sentry/react-native';
-import { theme } from '@splitcheck/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 
 SplashScreen.preventAutoHideAsync();
@@ -33,21 +31,19 @@ function RootLayout() {
   const signedIn = status === 'signedIn';
 
   return (
-    <PaperProvider theme={theme}>
-      <Stack>
-        <Stack.Protected guard={signedIn}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="chat/[conversationId]" options={{ headerShown: false }} />
-          <Stack.Screen name="new-chat" options={{ headerShown: false, presentation: 'modal' }} />
-          <Stack.Screen name="new-split/[conversationId]" options={{ headerShown: false, presentation: 'modal' }} />
-          <Stack.Screen name="check/[checkId]" options={{ headerShown: false }} />
-          <Stack.Screen name="scan/[conversationId]" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
-        </Stack.Protected>
-        <Stack.Protected guard={!signedIn}>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack.Protected>
-      </Stack>
-    </PaperProvider>
+    <Stack>
+      <Stack.Protected guard={signedIn}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="chat/[conversationId]" options={{ headerShown: false }} />
+        <Stack.Screen name="new-chat" options={{ headerShown: false, presentation: 'modal' }} />
+        <Stack.Screen name="new-split/[conversationId]" options={{ headerShown: false, presentation: 'modal' }} />
+        <Stack.Screen name="check/[checkId]" options={{ headerShown: false }} />
+        <Stack.Screen name="scan/[conversationId]" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+      </Stack.Protected>
+      <Stack.Protected guard={!signedIn}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      </Stack.Protected>
+    </Stack>
   );
 }
 

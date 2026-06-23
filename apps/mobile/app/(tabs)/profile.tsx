@@ -1,13 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Divider } from 'react-native-paper';
-import { COLORS } from '@splitcheck/ui';
+import { Icon, type IconName } from '@splitcheck/ui';
 import { getAvatarColor, getAvatarInitials } from '@splitcheck/core';
 import { useAuthStore } from '@/store/useAuthStore';
 
 type MenuItem = {
-  icon: string;
+  icon: IconName;
   label: string;
   value?: string;
   danger?: boolean;
@@ -26,24 +24,24 @@ export default function ProfileScreen() {
     {
       title: 'Account',
       items: [
-        { icon: 'account-edit-outline', label: 'Edit Profile' },
-        { icon: 'bell-outline', label: 'Notifications' },
-        { icon: 'shield-lock-outline', label: 'Privacy & Security' },
+        { icon: 'edit', label: 'Edit Profile' },
+        { icon: 'bell', label: 'Notifications' },
+        { icon: 'shield', label: 'Privacy & Security' },
       ],
     },
     {
       title: 'Preferences',
       items: [
-        { icon: 'currency-usd', label: 'Currency', value: 'USD' },
-        { icon: 'translate', label: 'Language', value: 'English' },
-        { icon: 'theme-light-dark', label: 'Appearance', value: 'Light' },
+        { icon: 'dollar-sign', label: 'Currency', value: 'USD' },
+        { icon: 'globe', label: 'Language', value: 'English' },
+        { icon: 'moon', label: 'Appearance', value: 'Dark' },
       ],
     },
     {
       title: 'Support',
       items: [
-        { icon: 'help-circle-outline', label: 'Help & FAQ' },
-        { icon: 'information-outline', label: 'About SplitCheck' },
+        { icon: 'help-circle', label: 'Help & FAQ' },
+        { icon: 'info', label: 'About SplitCheck' },
       ],
     },
     {
@@ -53,39 +51,41 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
-      {/* Profile hero */}
-      <View style={styles.hero}>
-        <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
-          <Text style={styles.avatarText}>{initials}</Text>
+    <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
+      <View className="items-center pt-6 pb-5 px-5">
+        <View
+          className="w-[72px] h-[72px] rounded-full items-center justify-center mb-3"
+          style={{ backgroundColor: avatarColor }}
+        >
+          <Text className="text-white text-2xl font-extrabold">{initials}</Text>
         </View>
-        <Text style={styles.name}>{displayName}</Text>
-        <Text style={styles.email}>{user?.email}</Text>
+        <Text className="text-text-primary text-xl font-bold">{displayName}</Text>
+        <Text className="text-text-secondary text-[13px] mt-1">{user?.email}</Text>
       </View>
 
-      <View style={styles.menuContainer}>
+      <View className="px-4 gap-4 pb-6">
         {menuSections.map((section, si) => (
-          <View key={si} style={styles.section}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-            <View style={styles.sectionCard}>
+          <View key={si} className="gap-1.5">
+            <Text className="text-text-secondary text-[11px] font-semibold tracking-wide uppercase px-1">
+              {section.title}
+            </Text>
+            <View className="bg-surface rounded-2xl overflow-hidden">
               {section.items.map((item, ii) => (
-                <View key={ii}>
-                  {ii > 0 && <Divider style={styles.divider} />}
-                  <TouchableOpacity style={styles.menuItem} activeOpacity={0.7} onPress={item.onPress}>
-                    <MaterialCommunityIcons
-                      name={item.icon as any}
-                      size={20}
-                      color={item.danger ? COLORS.error : COLORS.primary}
-                    />
-                    <Text style={[styles.menuLabel, item.danger && { color: COLORS.error }]}>{item.label}</Text>
-                    <View style={styles.menuRight}>
-                      {item.value && <Text style={styles.menuValue}>{item.value}</Text>}
-                      {!item.danger && (
-                        <MaterialCommunityIcons name="chevron-right" size={18} color={COLORS.outlineVariant} />
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  key={ii}
+                  className={`flex-row items-center px-4 py-3.5 gap-3.5 ${ii > 0 ? 'border-t border-border' : ''}`}
+                  activeOpacity={0.7}
+                  onPress={item.onPress}
+                >
+                  <Icon name={item.icon} size={20} color={item.danger ? '#F0A9A3' : '#A8E8D6'} />
+                  <Text className={`flex-1 text-[15px] ${item.danger ? 'text-negative' : 'text-text-primary'}`}>
+                    {item.label}
+                  </Text>
+                  <View className="flex-row items-center gap-1">
+                    {item.value && <Text className="text-text-secondary text-[13px]">{item.value}</Text>}
+                    {!item.danger && <Icon name="chevron-right" size={18} color="#6E6E73" />}
+                  </View>
+                </TouchableOpacity>
               ))}
             </View>
           </View>
@@ -94,95 +94,3 @@ export default function ProfileScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  hero: {
-    alignItems: 'center',
-    paddingTop: 24,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
-  avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
-  },
-  avatarText: {
-    color: '#FFFFFF',
-    fontSize: 24,
-    fontWeight: '800',
-  },
-  name: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: COLORS.onBackground,
-  },
-  email: {
-    fontSize: 13,
-    color: COLORS.onSurfaceVariant,
-    marginTop: 3,
-  },
-  menuContainer: {
-    paddingHorizontal: 16,
-    gap: 16,
-    paddingBottom: 24,
-  },
-  section: {
-    gap: 6,
-  },
-  sectionTitle: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: COLORS.onSurfaceVariant,
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    paddingHorizontal: 4,
-  },
-  sectionCard: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-    overflow: 'hidden',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.07,
-    shadowRadius: 2,
-  },
-  divider: {
-    backgroundColor: COLORS.surfaceVariant,
-    marginLeft: 52,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    gap: 14,
-  },
-  menuLabel: {
-    flex: 1,
-    fontSize: 15,
-    color: COLORS.onSurface,
-  },
-  menuRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  menuValue: {
-    fontSize: 13,
-    color: COLORS.onSurfaceVariant,
-  },
-});

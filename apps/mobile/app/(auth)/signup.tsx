@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import { COLORS } from '@splitcheck/ui';
+import { Button, TextField } from '@splitcheck/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function SignupScreen() {
@@ -27,88 +26,39 @@ export default function SignupScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Create Account</Text>
+    <SafeAreaView className="flex-1 bg-canvas">
+      <View className="flex-1 justify-center px-6 gap-3">
+        <Text className="text-text-primary text-2xl font-extrabold mb-3">Create Account</Text>
 
-        <TextInput
-          label="Name"
-          mode="outlined"
-          value={displayName}
-          onChangeText={setDisplayName}
-          style={styles.input}
-        />
-        <TextInput
+        <TextField label="Name" value={displayName} onChangeText={setDisplayName} />
+        <TextField
           label="Email"
-          mode="outlined"
           autoCapitalize="none"
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
-          style={styles.input}
         />
-        <TextInput
-          label="Password"
-          mode="outlined"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-        />
-        <Text style={styles.helper}>At least 8 characters.</Text>
+        <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
+        <Text className="text-text-secondary text-xs -mt-2">At least 8 characters.</Text>
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Text className="text-negative text-[13px] text-center">{error}</Text>}
 
-        <Button
-          mode="contained"
-          loading={busy}
-          disabled={busy || !email || !password || !displayName}
-          onPress={onSubmit}
-          style={styles.button}
-        >
-          Create Account
-        </Button>
+        <View className="mt-2">
+          <Button
+            variant="primary"
+            fullWidth
+            loading={busy}
+            disabled={busy || !email || !password || !displayName}
+            onPress={onSubmit}
+          >
+            Create Account
+          </Button>
+        </View>
 
-        <Button mode="text" onPress={() => router.push('/(auth)/login')}>
+        <Button variant="ghost" onPress={() => router.push('/(auth)/login')}>
           Already have an account? Sign in
         </Button>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    gap: 12,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-    marginBottom: 12,
-  },
-  input: {
-    backgroundColor: COLORS.surface,
-  },
-  helper: {
-    fontSize: 12,
-    color: COLORS.onSurfaceVariant,
-    marginTop: -8,
-  },
-  button: {
-    borderRadius: 24,
-    marginTop: 8,
-  },
-  error: {
-    color: COLORS.error,
-    fontSize: 13,
-    textAlign: 'center',
-  },
-});

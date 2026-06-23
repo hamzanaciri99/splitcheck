@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import { COLORS } from '@splitcheck/ui';
+import { Button, TextField } from '@splitcheck/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function LoginScreen() {
@@ -26,75 +25,31 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Sign In</Text>
+    <SafeAreaView className="flex-1 bg-canvas">
+      <View className="flex-1 justify-center px-6 gap-3">
+        <Text className="text-text-primary text-2xl font-extrabold mb-3">Sign In</Text>
 
-        <TextInput
+        <TextField
           label="Email"
-          mode="outlined"
           autoCapitalize="none"
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
-          style={styles.input}
         />
-        <TextInput
-          label="Password"
-          mode="outlined"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-        />
+        <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Text className="text-negative text-[13px] text-center">{error}</Text>}
 
-        <Button
-          mode="contained"
-          loading={busy}
-          disabled={busy || !email || !password}
-          onPress={onSubmit}
-          style={styles.button}
-        >
-          Sign In
-        </Button>
+        <View className="mt-2">
+          <Button variant="primary" fullWidth loading={busy} disabled={busy || !email || !password} onPress={onSubmit}>
+            Sign In
+          </Button>
+        </View>
 
-        <Button mode="text" onPress={() => router.push('/(auth)/signup')}>
+        <Button variant="ghost" onPress={() => router.push('/(auth)/signup')}>
           Don&apos;t have an account? Create one
         </Button>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    gap: 12,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-    marginBottom: 12,
-  },
-  input: {
-    backgroundColor: COLORS.surface,
-  },
-  button: {
-    borderRadius: 24,
-    marginTop: 8,
-  },
-  error: {
-    color: COLORS.error,
-    fontSize: 13,
-    textAlign: 'center',
-  },
-});

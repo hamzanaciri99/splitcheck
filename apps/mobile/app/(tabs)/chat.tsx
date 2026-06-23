@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IconButton } from 'react-native-paper';
 import { router } from 'expo-router';
 import type { Conversation, Message } from '@splitcheck/core';
 import { useChatStore, conversationTitle, otherParticipants } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { getAvatarInitials } from '@splitcheck/core';
-import { COLORS } from '@splitcheck/ui';
+import { IconButton, Icon } from '@splitcheck/ui';
 
 function previewText(message: Message | null): string {
   if (!message) return 'Say hello';
@@ -29,25 +28,23 @@ export default function ChatListScreen() {
   if (!user) return null;
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Chats</Text>
-        <IconButton
-          icon="plus"
-          iconColor={COLORS.onSurface}
-          size={22}
-          accessibilityLabel="New chat"
-          onPress={() => router.push('/new-chat')}
-        />
+    <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
+      <View className="flex-row justify-between items-center px-5 py-3">
+        <Text className="text-text-primary text-[22px] font-extrabold">Chats</Text>
+        <IconButton accessibilityLabel="New chat" onPress={() => router.push('/new-chat')}>
+          <Icon name="plus" size={20} color="#F5F5F5" />
+        </IconButton>
       </View>
 
       <FlatList
         data={conversations}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
+        contentContainerClassName="pb-6"
         ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No conversations yet. Start one with the + button.</Text>
+          <View className="p-10 items-center">
+            <Text className="text-text-secondary text-sm text-center">
+              No conversations yet. Start one with the + button.
+            </Text>
           </View>
         }
         renderItem={({ item }: { item: Conversation }) => {
@@ -55,18 +52,23 @@ export default function ChatListScreen() {
           const avatarUser = others[0];
           return (
             <TouchableOpacity
-              style={styles.row}
+              className="flex-row items-center px-5 py-3"
               activeOpacity={0.7}
               onPress={() => router.push(`/chat/${item.id}`)}
             >
-              <View style={[styles.avatar, { backgroundColor: avatarUser?.avatarColor ?? COLORS.primary }]}>
-                <Text style={styles.avatarText}>{getAvatarInitials(avatarUser?.displayName ?? '?')}</Text>
+              <View
+                className="w-12 h-12 rounded-full items-center justify-center mr-3"
+                style={{ backgroundColor: avatarUser?.avatarColor ?? '#A8E8D6' }}
+              >
+                <Text className="text-white text-[15px] font-bold">
+                  {getAvatarInitials(avatarUser?.displayName ?? '?')}
+                </Text>
               </View>
-              <View style={styles.info}>
-                <Text style={styles.name} numberOfLines={1}>
+              <View className="flex-1">
+                <Text className="text-text-primary text-[15px] font-semibold" numberOfLines={1}>
                   {conversationTitle(item, user.id)}
                 </Text>
-                <Text style={styles.preview} numberOfLines={1}>
+                <Text className="text-text-secondary text-[13px] mt-0.5" numberOfLines={1}>
                   {previewText(item.lastMessage)}
                 </Text>
               </View>
@@ -77,66 +79,3 @@ export default function ChatListScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-  },
-  listContent: {
-    paddingBottom: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  avatarText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  info: {
-    flex: 1,
-  },
-  name: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: COLORS.onSurface,
-  },
-  preview: {
-    fontSize: 13,
-    color: COLORS.onSurfaceVariant,
-    marginTop: 2,
-  },
-  emptyState: {
-    padding: 40,
-    alignItems: 'center',
-  },
-  emptyText: {
-    color: COLORS.onSurfaceVariant,
-    textAlign: 'center',
-    fontSize: 14,
-  },
-});
