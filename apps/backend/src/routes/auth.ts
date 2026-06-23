@@ -2,27 +2,18 @@ import { Router } from 'express';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
-import { signupSchema, loginSchema, googleAuthSchema, refreshSchema, type AuthResult, type User } from '@splitcheck/core';
+import { signupSchema, loginSchema, googleAuthSchema, refreshSchema, type AuthResult } from '@splitcheck/core';
 import { db } from '../db/client';
 import { users } from '../db/schema';
 import { issueTokens, verifyRefreshToken } from '../auth/jwt';
 import { HttpError } from '../errors';
 import { requireAuth } from '../middleware/auth';
 import { env } from '../env';
+import { toPublicUser } from '../dto';
 
 export const authRouter = Router();
 
 type UserRow = typeof users.$inferSelect;
-
-function toPublicUser(row: UserRow): User {
-  return {
-    id: row.id,
-    email: row.email,
-    displayName: row.displayName,
-    avatarColor: row.avatarColor,
-    createdAt: row.createdAt.toISOString(),
-  };
-}
 
 const AVATAR_COLORS = ['#6750A4', '#7D5260', '#386A20', '#B3261E', '#1D6C8C', '#9C5700'];
 function colorForEmail(email: string): string {

@@ -1,5 +1,6 @@
 import type { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
+import { MulterError } from 'multer';
 import { HttpError } from '../errors';
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
@@ -9,6 +10,10 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   }
   if (err instanceof HttpError) {
     res.status(err.status).json({ message: err.message });
+    return;
+  }
+  if (err instanceof MulterError) {
+    res.status(400).json({ message: err.message });
     return;
   }
   console.error(err);
