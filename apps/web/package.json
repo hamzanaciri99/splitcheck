@@ -1,0 +1,36 @@
+{
+  "name": "@splitcheck/web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-oauth/google": "^0.12.1",
+    "@sentry/react": "^9.0.0",
+    "@splitcheck/core": "*",
+    "@splitcheck/ui": "*",
+    "expo-asset": "^56.0.17",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native-paper": "^5.15.3",
+    "react-native-safe-area-context": "*",
+    "react-native-web": "^0.21.2",
+    "react-router-dom": "^7.1.1",
+    "socket.io-client": "^4.8.3",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "oxlint": "^1.69.0",
+    "typescript": "~6.0.2",
+    "vite": "^6.4.3"
+  }
+}

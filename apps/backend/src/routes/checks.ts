@@ -66,9 +66,13 @@ checksRouter.post('/conversations/:id/checks', async (req, res) => {
   await db
     .insert(checkItems)
     .values(input.items.map((i) => ({ checkId: checkRow.id, name: i.name, priceCents: i.priceCents })));
-  await db
-    .insert(checkParticipants)
-    .values(input.participants.map((p) => ({ checkId: checkRow.id, userId: p.userId, shareCents: p.shareCents })));
+  await db.insert(checkParticipants).values(
+    input.participants.map((p) =>
+      p.userId === userId
+        ? { checkId: checkRow.id, userId: p.userId, shareCents: p.shareCents, status: 'PAID' as const, respondedAt: new Date() }
+        : { checkId: checkRow.id, userId: p.userId, shareCents: p.shareCents }
+    )
+  );
 
   const [messageRow] = await db
     .insert(messages)
