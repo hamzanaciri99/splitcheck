@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { getAvatarInitials } from '@splitcheck/core';
 
 export type AvatarPerson = {
@@ -22,37 +22,23 @@ export function ParticipantAvatarBubble({ participant, isSelected = false, size 
       onPress={onPress}
       activeOpacity={onPress ? 0.7 : 1}
       accessibilityLabel={`${isSelected ? 'Unassign' : 'Assign'} ${participant.name}`}
-      style={[
-        styles.container,
-        {
-          width: size,
-          height: size,
-          borderRadius: size / 2,
-          backgroundColor: participant.avatarColor,
-          borderWidth: isSelected ? 3 : 0,
-          borderColor: isSelected ? '#FFFFFF' : 'transparent',
-          opacity: isSelected ? 1 : 0.7,
-        },
-      ]}
+      className="items-center justify-center"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: size / 2,
+        backgroundColor: participant.avatarColor,
+        opacity: isSelected ? 1 : 0.55,
+      }}
     >
-      <Text style={[styles.initials, { fontSize }]}>{initials}</Text>
+      <Text className="text-white font-bold" style={{ fontSize }}>
+        {initials}
+      </Text>
+      {isSelected && (
+        <View className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-accent items-center justify-center">
+          <Text className="text-accent-foreground text-[10px] font-bold">✓</Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  initials: {
-    color: '#FFFFFF',
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-});

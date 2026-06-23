@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View, Text } from 'react-native';
 import type { Check, CheckParticipantStatus } from '@splitcheck/core';
 import { formatCurrencyCents } from '@splitcheck/core';
-import { COLORS } from '../theme';
+import { Button } from './Button';
 
 type Props = {
   check: Check;
@@ -11,10 +10,10 @@ type Props = {
   onRespond: (status: 'PAID' | 'DECLINED') => Promise<void>;
 };
 
-function statusColor(status: CheckParticipantStatus): string {
-  if (status === 'PAID') return COLORS.success;
-  if (status === 'DECLINED') return COLORS.error;
-  return COLORS.onSurfaceVariant;
+function statusClass(status: CheckParticipantStatus): string {
+  if (status === 'PAID') return 'text-positive';
+  if (status === 'DECLINED') return 'text-negative';
+  return 'text-text-secondary';
 }
 
 export function SplitRequestCard({ check, currentUserId, onRespond }: Props) {
@@ -33,107 +32,41 @@ export function SplitRequestCard({ check, currentUserId, onRespond }: Props) {
   };
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.title}>{check.title}</Text>
-      <Text style={styles.subtitle}>
+    <View className="bg-surface rounded-2xl p-3.5 w-72">
+      <Text className="text-text-primary text-[15px] font-bold">{check.title}</Text>
+      <Text className="text-text-secondary text-xs mt-0.5 mb-2.5">
         Requested by {isCreator ? 'you' : check.createdBy.displayName} &middot;{' '}
         {formatCurrencyCents(check.totalAmountCents, check.currency)}
       </Text>
 
-      <View style={styles.participantList}>
+      <View className="gap-1.5">
         {check.participants.map((p) => (
-          <View key={p.id} style={styles.participantRow}>
-            <Text style={styles.participantName} numberOfLines={1}>
+          <View key={p.id} className="flex-row items-center gap-2">
+            <Text className="flex-1 text-text-primary text-[13px]" numberOfLines={1}>
               {p.user.id === currentUserId ? 'You' : p.user.displayName}
             </Text>
-            <Text style={styles.participantShare}>{formatCurrencyCents(p.shareCents, check.currency)}</Text>
-            <Text style={[styles.statusBadge, { color: statusColor(p.status) }]}>{p.status}</Text>
+            <Text className="text-text-primary text-[13px] font-semibold">
+              {formatCurrencyCents(p.shareCents, check.currency)}
+            </Text>
+            <Text className={`text-[11px] font-bold min-w-16 text-right ${statusClass(p.status)}`}>{p.status}</Text>
           </View>
         ))}
       </View>
 
       {canRespond && (
-        <View style={styles.actions}>
-          <Button
-            mode="outlined"
-            textColor={COLORS.error}
-            style={styles.actionButton}
-            loading={busy === 'DECLINED'}
-            disabled={busy !== null}
-            onPress={() => respond('DECLINED')}
-          >
-            Decline
-          </Button>
-          <Button
-            mode="contained"
-            buttonColor={COLORS.success}
-            style={styles.actionButton}
-            loading={busy === 'PAID'}
-            disabled={busy !== null}
-            onPress={() => respond('PAID')}
-          >
-            Mark as Paid
-          </Button>
+        <View className="flex-row gap-2 mt-3">
+          <View className="flex-1">
+            <Button variant="destructive" loading={busy === 'DECLINED'} disabled={busy !== null} onPress={() => respond('DECLINED')}>
+              Decline
+            </Button>
+          </View>
+          <View className="flex-1">
+            <Button variant="primary" loading={busy === 'PAID'} disabled={busy !== null} onPress={() => respond('PAID')}>
+              Mark as Paid
+            </Button>
+          </View>
         </View>
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-    padding: 14,
-    width: 280,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: COLORS.onSurface,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: COLORS.onSurfaceVariant,
-    marginTop: 2,
-    marginBottom: 10,
-  },
-  participantList: {
-    gap: 6,
-  },
-  participantRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  participantName: {
-    flex: 1,
-    fontSize: 13,
-    color: COLORS.onSurface,
-  },
-  participantShare: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: COLORS.onSurface,
-  },
-  statusBadge: {
-    fontSize: 11,
-    fontWeight: '700',
-    minWidth: 64,
-    textAlign: 'right',
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 12,
-  },
-  actionButton: {
-    flex: 1,
-    borderRadius: 20,
-  },
-});

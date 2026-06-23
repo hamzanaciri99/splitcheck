@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import type { ActivityReceipt } from '@splitcheck/core';
 import { getAvatarInitials, getAvatarColor } from '@splitcheck/core';
-import { COLORS } from '../theme';
 
 type Props = {
   receipt: ActivityReceipt;
@@ -23,91 +22,40 @@ export function ActivityItemRow({ receipt, onPress }: Props) {
     ? `Paid by You • ${receipt.date}`
     : `Paid by ${receipt.payer} • ${receipt.date}`;
 
-  const amountColor = receipt.isSettled
-    ? COLORS.onSurfaceVariant
-    : isPayerMe
-    ? COLORS.success
-    : COLORS.error;
-
+  const amountClass = receipt.isSettled ? 'text-text-secondary' : isPayerMe ? 'text-positive' : 'text-negative';
   const amountPrefix = receipt.isSettled ? '' : isPayerMe ? '+' : '-';
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.7} disabled={!onPress}>
-      <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
-        <Text style={styles.avatarText}>{initials}</Text>
+    <TouchableOpacity
+      className="flex-row items-center px-4 py-3"
+      onPress={onPress}
+      activeOpacity={0.7}
+      disabled={!onPress}
+    >
+      <View className="w-11 h-11 rounded-full items-center justify-center mr-3" style={{ backgroundColor: avatarColor }}>
+        <Text className="text-white text-sm font-bold">{initials}</Text>
       </View>
 
-      <View style={styles.info}>
-        <Text style={styles.title} numberOfLines={1}>{receipt.title}</Text>
-        <Text style={styles.subtitle} numberOfLines={1}>{subtitle}</Text>
+      <View className="flex-1 mr-2">
+        <Text className="text-text-primary text-[15px] font-semibold" numberOfLines={1}>
+          {receipt.title}
+        </Text>
+        <Text className="text-text-secondary text-xs mt-0.5" numberOfLines={1}>
+          {subtitle}
+        </Text>
       </View>
 
-      <View style={styles.amountSection}>
-        <Text style={[styles.amount, { color: amountColor }]}>
-          {amountPrefix}{formatCurrency(receipt.totalAmount)}
+      <View className="items-end">
+        <Text className={`text-[15px] font-bold ${amountClass}`}>
+          {amountPrefix}
+          {formatCurrency(receipt.totalAmount)}
         </Text>
         {receipt.isSettled && (
-          <View style={styles.settledBadge}>
-            <Text style={styles.settledText}>Settled</Text>
+          <View className="mt-1 bg-surface-alt rounded-md px-1.5 py-0.5">
+            <Text className="text-[10px] text-text-secondary font-semibold">Settled</Text>
           </View>
         )}
       </View>
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: COLORS.surface,
-  },
-  avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  avatarText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  info: {
-    flex: 1,
-    marginRight: 8,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: COLORS.onSurface,
-    marginBottom: 3,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: COLORS.onSurfaceVariant,
-  },
-  amountSection: {
-    alignItems: 'flex-end',
-  },
-  amount: {
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  settledBadge: {
-    marginTop: 4,
-    backgroundColor: COLORS.successContainer,
-    borderRadius: 8,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  settledText: {
-    fontSize: 10,
-    color: COLORS.success,
-    fontWeight: '600',
-  },
-});
