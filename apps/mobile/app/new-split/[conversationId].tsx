@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, Button, IconButton } from 'react-native-paper';
 import { router, useLocalSearchParams } from 'expo-router';
 import { formatCurrencyCents } from '@splitcheck/core';
 import { useSplitDraftStore } from '@/store/useSplitDraftStore';
 import { useChatStore } from '@/store/useChatStore';
-import { ParticipantAvatarBubble } from '@splitcheck/ui';
-import { COLORS } from '@splitcheck/ui';
+import { Button, IconButton, Icon, TextField, ProgressBar, ParticipantAvatarBubble } from '@splitcheck/ui';
 
 export default function NewSplitScreen() {
   const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
@@ -29,6 +27,8 @@ export default function NewSplitScreen() {
   const [newItemPrice, setNewItemPrice] = useState('');
 
   const totalCents = items.reduce((sum, i) => sum + i.priceCents, 0);
+  const assignedCount = items.filter((i) => i.assignedUserIds.length > 0).length;
+  const progress = items.length === 0 ? 0 : assignedCount / items.length;
 
   const onAddItem = () => {
     const priceCents = Math.round(parseFloat(newItemPrice || '0') * 100);
@@ -49,216 +49,101 @@ export default function NewSplitScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <IconButton icon="close" accessibilityLabel="Close" onPress={() => router.back()} />
-        <Text style={styles.headerTitle}>New Split</Text>
+    <SafeAreaView className="flex-1 bg-base">
+      <View className="flex-row items-center px-2 py-2">
+        <IconButton accessibilityLabel="Close" onPress={() => router.back()}>
+          <Icon name="close" size={20} color="#F5F5F5" />
+        </IconButton>
+        <Text className="text-text-primary text-[17px] font-bold ml-1">Select Items</Text>
       </View>
 
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-        <TextInput
-          mode="outlined"
-          label="What's this for?"
-          value={title}
-          onChangeText={setTitle}
-          style={styles.input}
-        />
+      <ScrollView className="flex-1" contentContainerClassName="px-5 pb-8 gap-2" showsVerticalScrollIndicator={false}>
+        <Text className="text-text-secondary text-sm mb-1">Tap items to assign them, then choose who shares each one.</Text>
 
-        <Text style={styles.sectionLabel}>Items</Text>
-        {items.map((item, index) => (
-          <TouchableOpacity
-            key={item.id}
-            style={[styles.itemRow, index === selectedItemIndex && styles.itemRowSelected]}
-            onPress={() => selectItem(index)}
-          >
-            <View style={styles.itemInfo}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemAssigned}>
-                {item.assignedUserIds.length === 0
-                  ? 'Tap avatars below to assign'
-                  : `Split between ${item.assignedUserIds.length} ${item.assignedUserIds.length === 1 ? 'person' : 'people'}`}
-              </Text>
-            </View>
-            <Text style={styles.itemPrice}>{formatCurrencyCents(item.priceCents)}</Text>
-            <IconButton icon="close" size={16} accessibilityLabel={`Remove ${item.name}`} onPress={() => removeItem(index)} />
-          </TouchableOpacity>
-        ))}
+        <TextField placeholder="What's this for?" value={title} onChangeText={setTitle} className="mb-2" />
 
-        <View style={styles.addItemRow}>
-          <TextInput
-            mode="outlined"
-            placeholder="Item name"
-            value={newItemName}
-            onChangeText={setNewItemName}
-            style={styles.addItemNameInput}
-            dense
-          />
-          <TextInput
-            mode="outlined"
-            placeholder="0.00"
-            value={newItemPrice}
-            onChangeText={setNewItemPrice}
-            keyboardType="decimal-pad"
-            style={styles.addItemPriceInput}
-            dense
-          />
-          <IconButton
-            icon="plus-circle"
-            iconColor={COLORS.primary}
-            accessibilityLabel="Add item"
-            onPress={onAddItem}
-          />
+        {items.map((item, index) => {
+          const isSelected = index === selectedItemIndex;
+          const isAssigned = item.assignedUserIds.length > 0;
+          return (
+            <TouchableOpacity
+              key={item.id}
+              className={`flex-row items-center bg-surface rounded-2xl px-4 py-3.5 border ${
+                isSelected ? 'border-accent' : 'border-transparent'
+              }`}
+              onPress={() => selectItem(index)}
+            >
+              <View
+                className={`w-6 h-6 rounded-full items-center justify-center mr-3 ${
+                  isAssigned ? 'bg-accent' : 'border border-border'
+                }`}
+              >
+                {isAssigned && <Icon name="check" size={14} color="#0D0D0F" />}
+              </View>
+              <View className="flex-1">
+                <Text className="text-text-primary text-[15px] font-semibold">{item.name}</Text>
+                {!isAssigned && <Text className="text-text-secondary text-xs mt-0.5">Tap avatars below to assign</Text>}
+              </View>
+              <Text className="text-text-primary text-[15px] font-bold mr-1">{formatCurrencyCents(item.priceCents)}</Text>
+              <IconButton accessibilityLabel={`Remove ${item.name}`} size={32} onPress={() => removeItem(index)}>
+                <Icon name="close" size={14} color="#6E6E73" />
+              </IconButton>
+            </TouchableOpacity>
+          );
+        })}
+
+        <View className="flex-row items-end gap-2 mt-1">
+          <View className="flex-[2]">
+            <TextField placeholder="Item name" value={newItemName} onChangeText={setNewItemName} />
+          </View>
+          <View className="flex-1">
+            <TextField placeholder="0.00" value={newItemPrice} onChangeText={setNewItemPrice} keyboardType="decimal-pad" />
+          </View>
+          <IconButton accessibilityLabel="Add item" variant="circle" onPress={onAddItem}>
+            <Icon name="plus" size={18} color="#A8E8D6" />
+          </IconButton>
         </View>
 
         {items.length > 0 && (
-          <>
-            <Text style={styles.sectionLabel}>
-              {selectedItemIndex < items.length ? `Who shares "${items[selectedItemIndex].name}"?` : 'Select an item'}
+          <View className="mt-4 gap-2">
+            <View className="flex-row justify-between">
+              <Text className="text-text-secondary text-xs font-semibold tracking-wide">ASSIGNMENT PROGRESS</Text>
+              <Text className="text-text-primary text-xs font-semibold">
+                {assignedCount}/{items.length} Assigned
+              </Text>
+            </View>
+            <ProgressBar progress={progress} />
+          </View>
+        )}
+
+        {items.length > 0 && (
+          <View className="mt-4 gap-3">
+            <Text className="text-text-secondary text-xs font-semibold tracking-wide">
+              {selectedItemIndex < items.length ? `WHO SHARES "${items[selectedItemIndex].name.toUpperCase()}"?` : 'SELECT AN ITEM'}
             </Text>
-            <View style={styles.avatarRow}>
+            <View className="flex-row flex-wrap gap-3">
               {participants.map((p) => (
-                <View key={p.id} style={styles.avatarWrapper}>
-                  <ParticipantAvatarBubble
-                    participant={{ name: p.displayName, avatarColor: p.avatarColor }}
-                    isSelected={items[selectedItemIndex]?.assignedUserIds.includes(p.id)}
-                    onPress={() => toggleParticipantForSelectedItem(p.id)}
-                  />
-                </View>
+                <ParticipantAvatarBubble
+                  key={p.id}
+                  participant={{ name: p.displayName, avatarColor: p.avatarColor }}
+                  isSelected={items[selectedItemIndex]?.assignedUserIds.includes(p.id)}
+                  onPress={() => toggleParticipantForSelectedItem(p.id)}
+                />
               ))}
             </View>
-          </>
+          </View>
         )}
       </ScrollView>
 
-      <View style={styles.footer}>
-        <View style={styles.totalRow}>
-          <Text style={styles.totalLabel}>Total</Text>
-          <Text style={styles.totalAmount}>{formatCurrencyCents(totalCents)}</Text>
+      <View className="px-5 py-4 border-t border-border">
+        <View className="flex-row justify-between mb-3">
+          <Text className="text-text-secondary text-sm">Total</Text>
+          <Text className="text-text-primary text-lg font-extrabold">{formatCurrencyCents(totalCents)}</Text>
         </View>
-        <Button
-          mode="contained"
-          loading={submitting}
-          disabled={submitting || items.length === 0}
-          onPress={onSubmit}
-          style={styles.submitButton}
-        >
+        <Button variant="primary" fullWidth loading={submitting} disabled={submitting || items.length === 0} onPress={onSubmit}>
           Send Split Request
         </Button>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: COLORS.onBackground,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 32,
-    gap: 8,
-  },
-  input: {
-    backgroundColor: COLORS.surface,
-    marginBottom: 8,
-  },
-  sectionLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: COLORS.onSurfaceVariant,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  itemRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.surface,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 6,
-    borderWidth: 1,
-    borderColor: 'transparent',
-  },
-  itemRowSelected: {
-    borderColor: COLORS.primary,
-  },
-  itemInfo: {
-    flex: 1,
-  },
-  itemName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.onSurface,
-  },
-  itemAssigned: {
-    fontSize: 11,
-    color: COLORS.onSurfaceVariant,
-    marginTop: 2,
-  },
-  itemPrice: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.onSurface,
-    marginRight: 4,
-  },
-  addItemRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  addItemNameInput: {
-    flex: 2,
-    backgroundColor: COLORS.surface,
-    marginRight: 6,
-  },
-  addItemPriceInput: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-  },
-  avatarRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  avatarWrapper: {
-    alignItems: 'center',
-  },
-  footer: {
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.surfaceVariant,
-  },
-  totalRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  totalLabel: {
-    fontSize: 14,
-    color: COLORS.onSurfaceVariant,
-  },
-  totalAmount: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-  },
-  submitButton: {
-    borderRadius: 24,
-  },
-});
