@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { and, desc, eq, inArray, lt } from 'drizzle-orm';
-import { createConversationSchema, createMessageSchema, type Conversation } from '@splitcheck/core';
+import { createConversationSchema, createMessageSchema, SOCKET_EVENTS, type Conversation } from '@splitcheck/core';
 import { db } from '../db/client';
 import { attachments, conversationParticipants, conversations, messages, users } from '../db/schema';
 import { requireAuth } from '../middleware/auth';
@@ -120,7 +120,7 @@ conversationsRouter.post('/:id/messages', async (req, res) => {
     .returning();
 
   const dto = await buildMessageDto(row);
-  await emitToConversation(conversationId, 'message:new', dto);
+  await emitToConversation(conversationId, SOCKET_EVENTS.MESSAGE_NEW, dto);
   res.status(201).json(dto);
 });
 
@@ -144,7 +144,7 @@ conversationsRouter.post('/:id/attachments', upload.single('file'), async (req, 
     .returning();
 
   const dto = await buildMessageDto(messageRow);
-  await emitToConversation(conversationId, 'message:new', dto);
+  await emitToConversation(conversationId, SOCKET_EVENTS.MESSAGE_NEW, dto);
 
   const extracted = await extractReceiptItems(req.file.path, req.file.mimetype).catch((err) => {
     console.error('Receipt extraction failed:', err);

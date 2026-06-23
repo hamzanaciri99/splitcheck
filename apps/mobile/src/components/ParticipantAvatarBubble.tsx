@@ -21,6 +21,7 @@ export function ParticipantAvatarBubble({ participant, isSelected = false, size 
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={onPress ? 0.7 : 1}
+      accessibilityLabel={`${isSelected ? 'Unassign' : 'Assign'} ${participant.name}`}
       style={[
         styles.container,
         {

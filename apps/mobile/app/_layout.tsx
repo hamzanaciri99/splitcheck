@@ -36,6 +36,9 @@ function RootLayout() {
       <Stack>
         <Stack.Protected guard={signedIn}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="chat/[conversationId]" options={{ headerShown: false }} />
+          <Stack.Screen name="new-chat" options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen name="new-split/[conversationId]" options={{ headerShown: false, presentation: 'modal' }} />
         </Stack.Protected>
         <Stack.Protected guard={!signedIn}>
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />

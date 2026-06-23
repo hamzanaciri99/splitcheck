@@ -33,6 +33,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'Chat',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="chat-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="groups"
         options={{
           title: 'Groups',

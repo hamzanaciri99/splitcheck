@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { and, eq } from 'drizzle-orm';
-import { createCheckSchema, respondCheckSchema, rowsToCsv } from '@splitcheck/core';
+import { createCheckSchema, respondCheckSchema, rowsToCsv, SOCKET_EVENTS } from '@splitcheck/core';
 import { db } from '../db/client';
 import { checkItems, checkParticipants, checks, conversationParticipants, messages } from '../db/schema';
 import { requireAuth } from '../middleware/auth';
@@ -76,7 +76,7 @@ checksRouter.post('/conversations/:id/checks', async (req, res) => {
     .returning();
 
   const messageDto = await buildMessageDto(messageRow);
-  await emitToConversation(conversationId, 'message:new', messageDto);
+  await emitToConversation(conversationId, SOCKET_EVENTS.MESSAGE_NEW, messageDto);
 
   res.status(201).json(messageDto);
 });
@@ -100,7 +100,7 @@ checksRouter.patch('/checks/:id/respond', async (req, res) => {
 
   const [checkRow] = await db.select().from(checks).where(eq(checks.id, checkId)).limit(1);
   const dto = await buildCheckDto(checkId);
-  await emitToConversation(checkRow.conversationId, 'check:updated', dto);
+  await emitToConversation(checkRow.conversationId, SOCKET_EVENTS.CHECK_UPDATED, dto);
 
   res.json(dto);
 });
