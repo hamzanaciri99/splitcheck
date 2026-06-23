@@ -83,3 +83,13 @@ export interface ExtractedReceipt {
   items: ExtractedReceiptItem[];
   totalCents: number | null;
 }
+
+export interface ActivityReceipt {
+  id: string;
+  title: string;
+  date: string;
+  totalAmount: number;
+  payer: string;
+  isMine: boolean;
+  isSettled: boolean;
+}

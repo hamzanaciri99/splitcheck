@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
-import { COLORS } from '@/theme/theme';
+import { COLORS } from '@splitcheck/ui';
 
 export default function GroupsScreen() {
   return (

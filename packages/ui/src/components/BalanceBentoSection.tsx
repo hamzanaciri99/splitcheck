@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS } from '@/theme/theme';
+import { COLORS } from '../theme';
 
 type Props = {
   totalBalance: number;

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 import type { Check, CheckParticipantStatus } from '@splitcheck/core';
 import { formatCurrencyCents } from '@splitcheck/core';
-import { COLORS } from '@/theme/theme';
+import { COLORS } from '../theme';
 
 type Props = {
   check: Check;

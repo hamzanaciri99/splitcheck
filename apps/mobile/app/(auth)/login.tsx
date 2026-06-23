@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TextInput, Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import { COLORS } from '@/theme/theme';
+import { COLORS } from '@splitcheck/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function LoginScreen() {

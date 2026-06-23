@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { getAvatarInitials } from '@/utils/avatar';
+import { getAvatarInitials } from '@splitcheck/core';
 
 export type AvatarPerson = {
   name: string;

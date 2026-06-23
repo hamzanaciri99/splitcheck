@@ -5,3 +5,4 @@ export * from './apiClient';
 export * from './csv';
 export * from './format';
 export * from './socketEvents';
+export * from './avatar';

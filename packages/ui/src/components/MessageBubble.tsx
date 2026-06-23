@@ -1,19 +1,19 @@
 import { View, Text, Image, StyleSheet } from 'react-native';
 import type { Message } from '@splitcheck/core';
-import { COLORS } from '@/theme/theme';
-import { API_URL } from '@/api/client';
+import { COLORS } from '../theme';
 
 type Props = {
   message: Message;
   isMine: boolean;
+  baseUrl: string;
 };
 
-export function MessageBubble({ message, isMine }: Props) {
+export function MessageBubble({ message, isMine, baseUrl }: Props) {
   return (
     <View style={[styles.row, isMine ? styles.rowMine : styles.rowTheirs]}>
       <View style={[styles.bubble, isMine ? styles.bubbleMine : styles.bubbleTheirs]}>
         {message.type === 'RECEIPT' && message.attachment ? (
-          <Image source={{ uri: `${API_URL}${message.attachment.url}` }} style={styles.image} resizeMode="cover" />
+          <Image source={{ uri: `${baseUrl}${message.attachment.url}` }} style={styles.image} resizeMode="cover" />
         ) : (
           <Text style={[styles.text, isMine ? styles.textMine : styles.textTheirs]}>{message.body}</Text>
         )}

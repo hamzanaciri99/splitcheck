@@ -7,9 +7,9 @@ import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useSplitStore } from '@/store/useSplitStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import { ActivityItemRow } from '@/components/ActivityItemRow';
+import { ActivityItemRow } from '@splitcheck/ui';
 import { api, API_URL } from '@/api/client';
-import { COLORS } from '@/theme/theme';
+import { COLORS } from '@splitcheck/ui';
 
 export default function HistoryScreen() {
   const { dashboard, refreshDashboard } = useSplitStore();

@@ -6,8 +6,8 @@ import { router } from 'expo-router';
 import type { Conversation, Message } from '@splitcheck/core';
 import { useChatStore, conversationTitle, otherParticipants } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import { getAvatarInitials } from '@/utils/avatar';
-import { COLORS } from '@/theme/theme';
+import { getAvatarInitials } from '@splitcheck/core';
+import { COLORS } from '@splitcheck/ui';
 
 function previewText(message: Message | null): string {
   if (!message) return 'Say hello';

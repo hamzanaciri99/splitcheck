@@ -6,8 +6,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { formatCurrencyCents } from '@splitcheck/core';
 import { useSplitDraftStore } from '@/store/useSplitDraftStore';
 import { useChatStore } from '@/store/useChatStore';
-import { ParticipantAvatarBubble } from '@/components/ParticipantAvatarBubble';
-import { COLORS } from '@/theme/theme';
+import { ParticipantAvatarBubble } from '@splitcheck/ui';
+import { COLORS } from '@splitcheck/ui';
 
 export default function NewSplitScreen() {
   const { conversationId } = useLocalSearchParams<{ conversationId: string }>();

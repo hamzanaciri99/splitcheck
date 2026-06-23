@@ -16,10 +16,8 @@ import type { Message } from '@splitcheck/core';
 import { useChatStore, conversationTitle } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useSplitDraftStore } from '@/store/useSplitDraftStore';
-import { api } from '@/api/client';
-import { MessageBubble } from '@/components/MessageBubble';
-import { SplitRequestCard } from '@/components/SplitRequestCard';
-import { COLORS } from '@/theme/theme';
+import { api, API_URL } from '@/api/client';
+import { MessageBubble, SplitRequestCard, COLORS } from '@splitcheck/ui';
 
 export default function ChatThreadScreen() {
   const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
@@ -149,7 +147,7 @@ export default function ChatThreadScreen() {
                 </View>
               );
             }
-            return <MessageBubble message={item} isMine={item.sender.id === user.id} />;
+            return <MessageBubble message={item} isMine={item.sender.id === user.id} baseUrl={API_URL} />;
           }}
         />
 

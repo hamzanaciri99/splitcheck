@@ -4,9 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
 import { useSplitStore } from '@/store/useSplitStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import { BalanceBentoSection } from '@/components/BalanceBentoSection';
-import { ActivityItemRow } from '@/components/ActivityItemRow';
-import { COLORS } from '@/theme/theme';
+import { BalanceBentoSection } from '@splitcheck/ui';
+import { ActivityItemRow } from '@splitcheck/ui';
+import { COLORS } from '@splitcheck/ui';
 
 export default function ActivityScreen() {
   const { dashboard, refreshDashboard } = useSplitStore();

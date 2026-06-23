@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { COLORS } from '@/theme/theme';
+import { COLORS } from '@splitcheck/ui';
 
 export default function TabLayout() {
   return (

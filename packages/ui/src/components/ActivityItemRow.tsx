@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import type { ActivityReceipt } from '@/store/useSplitStore';
-import { COLORS } from '@/theme/theme';
-import { getAvatarInitials, getAvatarColor } from '@/utils/avatar';
+import type { ActivityReceipt } from '@splitcheck/core';
+import { getAvatarInitials, getAvatarColor } from '@splitcheck/core';
+import { COLORS } from '../theme';
 
 type Props = {
   receipt: ActivityReceipt;

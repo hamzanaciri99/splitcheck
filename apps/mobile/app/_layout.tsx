@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Sentry from '@sentry/react-native';
-import { theme } from '@/theme/theme';
+import { theme } from '@splitcheck/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 
 SplashScreen.preventAutoHideAsync();

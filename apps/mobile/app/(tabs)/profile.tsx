@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
-import { COLORS } from '@/theme/theme';
-import { getAvatarColor, getAvatarInitials } from '@/utils/avatar';
+import { COLORS } from '@splitcheck/ui';
+import { getAvatarColor, getAvatarInitials } from '@splitcheck/core';
 import { useAuthStore } from '@/store/useAuthStore';
 
 type MenuItem = {

@@ -1,16 +1,6 @@
 import { create } from 'zustand';
-import type { Check } from '@splitcheck/core';
+import type { ActivityReceipt, Check } from '@splitcheck/core';
 import { api } from '@/api/client';
-
-export type ActivityReceipt = {
-  id: string;
-  title: string;
-  date: string;
-  totalAmount: number;
-  payer: string;
-  isMine: boolean;
-  isSettled: boolean;
-};
 
 export type DashboardState = {
   owedToYou: number;

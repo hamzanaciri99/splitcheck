@@ -6,7 +6,7 @@ import { router } from 'expo-router';
 import type { User } from '@splitcheck/core';
 import { api } from '@/api/client';
 import { useChatStore } from '@/store/useChatStore';
-import { COLORS } from '@/theme/theme';
+import { COLORS } from '@splitcheck/ui';
 
 export default function NewChatScreen() {
   const { startConversation } = useChatStore();
