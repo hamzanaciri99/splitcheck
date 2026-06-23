@@ -26,6 +26,21 @@ checksRouter.get('/checks/mine', async (req, res) => {
   res.json(dtos);
 });
 
+checksRouter.get('/checks/:id', async (req, res) => {
+  const checkId = req.params.id;
+  const userId = req.userId!;
+
+  const [participantRow] = await db
+    .select()
+    .from(checkParticipants)
+    .where(and(eq(checkParticipants.checkId, checkId), eq(checkParticipants.userId, userId)))
+    .limit(1);
+  if (!participantRow) throw new HttpError(403, 'You are not a participant on this check');
+
+  const dto = await buildCheckDto(checkId);
+  res.json(dto);
+});
+
 checksRouter.post('/conversations/:id/checks', async (req, res) => {
   const conversationId = req.params.id;
   const userId = req.userId!;

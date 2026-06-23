@@ -143,6 +143,7 @@ export default function ChatThreadScreen() {
                     check={item.check}
                     currentUserId={user.id}
                     onRespond={(status) => respondToCheck(item.check!.id, status)}
+                    onPress={() => router.push({ pathname: '/check/[checkId]', params: { checkId: item.check!.id } })}
                   />
                 </View>
               );

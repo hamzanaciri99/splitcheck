@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import type { Check, CheckParticipantStatus } from '@splitcheck/core';
 import { formatCurrencyCents } from '@splitcheck/core';
 import { Button } from './Button';
@@ -8,6 +8,7 @@ type Props = {
   check: Check;
   currentUserId: string;
   onRespond: (status: 'PAID' | 'DECLINED') => Promise<void>;
+  onPress?: () => void;
 };
 
 function statusClass(status: CheckParticipantStatus): string {
@@ -16,7 +17,7 @@ function statusClass(status: CheckParticipantStatus): string {
   return 'text-text-secondary';
 }
 
-export function SplitRequestCard({ check, currentUserId, onRespond }: Props) {
+export function SplitRequestCard({ check, currentUserId, onRespond, onPress }: Props) {
   const [busy, setBusy] = useState<'PAID' | 'DECLINED' | null>(null);
   const isCreator = check.createdBy.id === currentUserId;
   const myParticipant = check.participants.find((p) => p.user.id === currentUserId);
@@ -32,7 +33,12 @@ export function SplitRequestCard({ check, currentUserId, onRespond }: Props) {
   };
 
   return (
-    <View className="bg-surface rounded-2xl p-3.5 w-72">
+    <TouchableOpacity
+      className="bg-surface rounded-2xl p-3.5 w-72"
+      onPress={onPress}
+      activeOpacity={onPress ? 0.8 : 1}
+      disabled={!onPress}
+    >
       <Text className="text-text-primary text-[15px] font-bold">{check.title}</Text>
       <Text className="text-text-secondary text-xs mt-0.5 mb-2.5">
         Requested by {isCreator ? 'you' : check.createdBy.displayName} &middot;{' '}
@@ -67,6 +73,6 @@ export function SplitRequestCard({ check, currentUserId, onRespond }: Props) {
           </View>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
