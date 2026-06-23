@@ -3,16 +3,17 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSplitStore } from '@/store/useSplitStore';
+import { useAuthStore } from '@/store/useAuthStore';
 import { ActivityItemRow } from '@/components/ActivityItemRow';
-import { router } from 'expo-router';
 import { COLORS } from '@/theme/theme';
 
 export default function HistoryScreen() {
   const { dashboard, refreshDashboard } = useSplitStore();
+  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
-    refreshDashboard();
-  }, []);
+    if (user) refreshDashboard(user.id);
+  }, [user]);
 
   const settledReceipts = dashboard.receipts.filter((r) => r.isSettled);
 
@@ -35,11 +36,7 @@ export default function HistoryScreen() {
         ) : (
           <View style={styles.list}>
             {settledReceipts.map((receipt) => (
-              <ActivityItemRow
-                key={receipt.id}
-                receipt={receipt}
-                onPress={() => router.push(`/split-summary/${receipt.id}`)}
-              />
+              <ActivityItemRow key={receipt.id} receipt={receipt} />
             ))}
           </View>
         )}

@@ -1,9 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Participant } from '@/repositories/SplitRepository';
-import { getAvatarInitials } from '@/constants/seedData';
+import { getAvatarInitials } from '@/utils/avatar';
+
+export type AvatarPerson = {
+  name: string;
+  avatarColor: string;
+};
 
 type Props = {
-  participant: Participant;
+  participant: AvatarPerson;
   isSelected?: boolean;
   size?: number;
   onPress?: () => void;

@@ -11,6 +11,21 @@ import { emitToConversation } from '../realtime/socket';
 export const checksRouter = Router();
 checksRouter.use(requireAuth);
 
+checksRouter.get('/checks/mine', async (req, res) => {
+  const userId = req.userId!;
+
+  const participantRows = await db
+    .select({ checkId: checkParticipants.checkId })
+    .from(checkParticipants)
+    .where(eq(checkParticipants.userId, userId));
+  const checkIds = Array.from(new Set(participantRows.map((p) => p.checkId)));
+
+  const dtos = await Promise.all(checkIds.map(buildCheckDto));
+  dtos.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+  res.json(dtos);
+});
+
 checksRouter.post('/conversations/:id/checks', async (req, res) => {
   const conversationId = req.params.id;
   const userId = req.userId!;

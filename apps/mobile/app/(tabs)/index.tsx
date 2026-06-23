@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FAB, IconButton } from 'react-native-paper';
-import { router } from 'expo-router';
+import { IconButton } from 'react-native-paper';
 import { useSplitStore } from '@/store/useSplitStore';
+import { useAuthStore } from '@/store/useAuthStore';
 import { BalanceBentoSection } from '@/components/BalanceBentoSection';
 import { ActivityItemRow } from '@/components/ActivityItemRow';
 import { COLORS } from '@/theme/theme';
 
 export default function ActivityScreen() {
   const { dashboard, refreshDashboard } = useSplitStore();
+  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
-    refreshDashboard();
-  }, []);
+    if (user) refreshDashboard(user.id);
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -25,7 +26,6 @@ export default function ActivityScreen() {
         </View>
         <View style={styles.headerActions}>
           <IconButton icon="bell-outline" iconColor={COLORS.onSurface} size={22} onPress={() => {}} />
-          <IconButton icon="menu" iconColor={COLORS.onSurface} size={22} onPress={() => {}} />
         </View>
       </View>
 
@@ -44,35 +44,20 @@ export default function ActivityScreen() {
         {/* Recent Activity */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <Text style={styles.seeAll}>See all</Text>
         </View>
 
         {dashboard.receipts.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No activity yet. Scan your first receipt!</Text>
+            <Text style={styles.emptyText}>No split checks yet.</Text>
           </View>
         ) : (
           <View style={styles.activityList}>
             {dashboard.receipts.map((receipt) => (
-              <ActivityItemRow
-                key={receipt.id}
-                receipt={receipt}
-                onPress={() => router.push(`/split-summary/${receipt.id}`)}
-              />
+              <ActivityItemRow key={receipt.id} receipt={receipt} />
             ))}
           </View>
         )}
       </ScrollView>
-
-      {/* FAB */}
-      <FAB
-        icon="camera"
-        label="Scan Receipt"
-        style={styles.fab}
-        onPress={() => router.push('/camera')}
-        color={COLORS.onPrimary}
-        customSize={56}
-      />
     </SafeAreaView>
   );
 }
@@ -122,11 +107,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.onBackground,
   },
-  seeAll: {
-    fontSize: 13,
-    color: COLORS.primary,
-    fontWeight: '600',
-  },
   activityList: {
     backgroundColor: COLORS.surface,
     borderRadius: 16,
@@ -146,12 +126,5 @@ const styles = StyleSheet.create({
     color: COLORS.onSurfaceVariant,
     textAlign: 'center',
     fontSize: 14,
-  },
-  fab: {
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    backgroundColor: COLORS.primary,
-    borderRadius: 28,
   },
 });

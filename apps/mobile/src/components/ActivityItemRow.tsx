@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Receipt } from '@/repositories/SplitRepository';
+import type { ActivityReceipt } from '@/store/useSplitStore';
 import { COLORS } from '@/theme/theme';
-import { getAvatarInitials, getAvatarColor } from '@/constants/seedData';
+import { getAvatarInitials, getAvatarColor } from '@/utils/avatar';
 
 type Props = {
-  receipt: Receipt;
-  onPress: () => void;
+  receipt: ActivityReceipt;
+  onPress?: () => void;
 };
 
 function formatCurrency(amount: number): string {
@@ -15,7 +15,7 @@ function formatCurrency(amount: number): string {
 export function ActivityItemRow({ receipt, onPress }: Props) {
   const initials = getAvatarInitials(receipt.title);
   const avatarColor = getAvatarColor(receipt.title);
-  const isPayerMe = receipt.payer === 'You';
+  const isPayerMe = receipt.isMine;
 
   const subtitle = receipt.isSettled
     ? 'All settled'
@@ -32,7 +32,7 @@ export function ActivityItemRow({ receipt, onPress }: Props) {
   const amountPrefix = receipt.isSettled ? '' : isPayerMe ? '+' : '-';
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.7} disabled={!onPress}>
       <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
         <Text style={styles.avatarText}>{initials}</Text>
       </View>

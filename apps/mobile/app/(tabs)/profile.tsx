@@ -3,52 +3,54 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
 import { COLORS } from '@/theme/theme';
-import { getAvatarColor, getAvatarInitials } from '@/constants/seedData';
-
-const MY_NAME = 'Me';
+import { getAvatarColor, getAvatarInitials } from '@/utils/avatar';
+import { useAuthStore } from '@/store/useAuthStore';
 
 type MenuItem = {
   icon: string;
   label: string;
   value?: string;
+  danger?: boolean;
+  onPress?: () => void;
 };
 
-const MENU_SECTIONS: { title: string; items: MenuItem[] }[] = [
-  {
-    title: 'Account',
-    items: [
-      { icon: 'account-edit-outline', label: 'Edit Profile' },
-      { icon: 'bell-outline', label: 'Notifications' },
-      { icon: 'shield-lock-outline', label: 'Privacy & Security' },
-    ],
-  },
-  {
-    title: 'Payments',
-    items: [
-      { icon: 'credit-card-outline', label: 'Payment Methods' },
-      { icon: 'bank-outline', label: 'Bank Accounts' },
-    ],
-  },
-  {
-    title: 'Preferences',
-    items: [
-      { icon: 'currency-usd', label: 'Currency', value: 'USD' },
-      { icon: 'translate', label: 'Language', value: 'English' },
-      { icon: 'theme-light-dark', label: 'Appearance', value: 'Light' },
-    ],
-  },
-  {
-    title: 'Support',
-    items: [
-      { icon: 'help-circle-outline', label: 'Help & FAQ' },
-      { icon: 'information-outline', label: 'About SplitCheck' },
-    ],
-  },
-];
-
 export default function ProfileScreen() {
-  const avatarColor = getAvatarColor(MY_NAME);
-  const initials = getAvatarInitials(MY_NAME);
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
+
+  const displayName = user?.displayName ?? '';
+  const avatarColor = user?.avatarColor ?? getAvatarColor(displayName);
+  const initials = getAvatarInitials(displayName);
+
+  const menuSections: { title: string; items: MenuItem[] }[] = [
+    {
+      title: 'Account',
+      items: [
+        { icon: 'account-edit-outline', label: 'Edit Profile' },
+        { icon: 'bell-outline', label: 'Notifications' },
+        { icon: 'shield-lock-outline', label: 'Privacy & Security' },
+      ],
+    },
+    {
+      title: 'Preferences',
+      items: [
+        { icon: 'currency-usd', label: 'Currency', value: 'USD' },
+        { icon: 'translate', label: 'Language', value: 'English' },
+        { icon: 'theme-light-dark', label: 'Appearance', value: 'Light' },
+      ],
+    },
+    {
+      title: 'Support',
+      items: [
+        { icon: 'help-circle-outline', label: 'Help & FAQ' },
+        { icon: 'information-outline', label: 'About SplitCheck' },
+      ],
+    },
+    {
+      title: 'Session',
+      items: [{ icon: 'logout', label: 'Sign Out', danger: true, onPress: () => logout() }],
+    },
+  ];
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -57,24 +59,30 @@ export default function ProfileScreen() {
         <View style={[styles.avatar, { backgroundColor: avatarColor }]}>
           <Text style={styles.avatarText}>{initials}</Text>
         </View>
-        <Text style={styles.name}>My Profile</Text>
-        <Text style={styles.email}>naciri.nhamza@gmail.com</Text>
+        <Text style={styles.name}>{displayName}</Text>
+        <Text style={styles.email}>{user?.email}</Text>
       </View>
 
       <View style={styles.menuContainer}>
-        {MENU_SECTIONS.map((section, si) => (
+        {menuSections.map((section, si) => (
           <View key={si} style={styles.section}>
             <Text style={styles.sectionTitle}>{section.title}</Text>
             <View style={styles.sectionCard}>
               {section.items.map((item, ii) => (
                 <View key={ii}>
                   {ii > 0 && <Divider style={styles.divider} />}
-                  <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
-                    <MaterialCommunityIcons name={item.icon as any} size={20} color={COLORS.primary} />
-                    <Text style={styles.menuLabel}>{item.label}</Text>
+                  <TouchableOpacity style={styles.menuItem} activeOpacity={0.7} onPress={item.onPress}>
+                    <MaterialCommunityIcons
+                      name={item.icon as any}
+                      size={20}
+                      color={item.danger ? COLORS.error : COLORS.primary}
+                    />
+                    <Text style={[styles.menuLabel, item.danger && { color: COLORS.error }]}>{item.label}</Text>
                     <View style={styles.menuRight}>
                       {item.value && <Text style={styles.menuValue}>{item.value}</Text>}
-                      <MaterialCommunityIcons name="chevron-right" size={18} color={COLORS.outlineVariant} />
+                      {!item.danger && (
+                        <MaterialCommunityIcons name="chevron-right" size={18} color={COLORS.outlineVariant} />
+                      )}
                     </View>
                   </TouchableOpacity>
                 </View>

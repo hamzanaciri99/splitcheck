@@ -28,7 +28,6 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sqlite",
       [
         "expo-camera",
         {
@@ -48,7 +47,9 @@
           "image": "./assets/splash-icon.png",
           "imageWidth": 200
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

@@ -3,31 +3,37 @@ import { Stack } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 import * as SplashScreen from 'expo-splash-screen';
 import { theme } from '@/theme/theme';
-import { useDatabase } from '@/hooks/useDatabase';
+import { useAuthStore } from '@/store/useAuthStore';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { isReady } = useDatabase();
+  const status = useAuthStore((s) => s.status);
+  const bootstrap = useAuthStore((s) => s.bootstrap);
 
   useEffect(() => {
-    if (isReady) {
+    bootstrap();
+  }, []);
+
+  useEffect(() => {
+    if (status !== 'loading') {
       SplashScreen.hideAsync();
     }
-  }, [isReady]);
+  }, [status]);
 
-  if (!isReady) return null;
+  if (status === 'loading') return null;
+
+  const signedIn = status === 'signedIn';
 
   return (
     <PaperProvider theme={theme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="camera"
-          options={{ headerShown: false, presentation: 'fullScreenModal', animation: 'slide_from_bottom' }}
-        />
-        <Stack.Screen name="assign-items" options={{ headerShown: false }} />
-        <Stack.Screen name="split-summary/[receiptId]" options={{ headerShown: false }} />
+        <Stack.Protected guard={signedIn}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack.Protected>
+        <Stack.Protected guard={!signedIn}>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        </Stack.Protected>
       </Stack>
     </PaperProvider>
   );
