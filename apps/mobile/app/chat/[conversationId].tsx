@@ -1,15 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
-} from 'react-native';
+import { View, Text, FlatList, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, IconButton } from 'react-native-paper';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import type { Message } from '@splitcheck/core';
@@ -17,7 +8,7 @@ import { useChatStore, conversationTitle } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useSplitDraftStore } from '@/store/useSplitDraftStore';
 import { api, API_URL } from '@/api/client';
-import { MessageBubble, SplitRequestCard, COLORS } from '@splitcheck/ui';
+import { MessageBubble, SplitRequestCard, IconButton, Icon, TextField } from '@splitcheck/ui';
 
 export default function ChatThreadScreen() {
   const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
@@ -109,31 +100,34 @@ export default function ChatThreadScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.header}>
-        <IconButton icon="arrow-left" accessibilityLabel="Back" onPress={() => router.back()} />
-        <Text style={styles.title} numberOfLines={1}>
+    <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
+      <View className="flex-row items-center pr-2">
+        <IconButton accessibilityLabel="Back" onPress={() => router.back()}>
+          <Icon name="arrow-left" size={20} color="#F5F5F5" />
+        </IconButton>
+        <Text className="flex-1 text-text-primary text-[16px] font-bold" numberOfLines={1}>
           {conversation ? conversationTitle(conversation, user.id) : ''}
         </Text>
         <IconButton
-          icon="receipt"
           accessibilityLabel="New split"
           onPress={() => openSplitComposer(null, '', [])}
           disabled={!conversation}
-        />
+        >
+          <Icon name="receipt" size={20} color="#F5F5F5" />
+        </IconButton>
       </View>
 
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <FlatList
           ref={listRef}
           data={threadMessages}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
+          contentContainerClassName="py-3"
           onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
           renderItem={({ item }) => {
             if (item.type === 'SPLIT_REQUEST' && item.check) {
               return (
-                <View style={styles.cardRow}>
+                <View className="px-3 my-1 items-start">
                   <SplitRequestCard
                     check={item.check}
                     currentUserId={user.id}
@@ -147,65 +141,18 @@ export default function ChatThreadScreen() {
           }}
         />
 
-        <View style={styles.inputBar}>
-          <IconButton
-            icon="paperclip"
-            accessibilityLabel="Attach receipt"
-            onPress={onAttachReceipt}
-            loading={uploading}
-            disabled={uploading}
-          />
-          <TextInput
-            mode="outlined"
-            placeholder="Message"
-            value={body}
-            onChangeText={setBody}
-            onSubmitEditing={onSend}
-            style={styles.input}
-            dense
-          />
-          <IconButton icon="send" accessibilityLabel="Send" onPress={onSend} disabled={!body.trim()} />
+        <View className="flex-row items-center gap-2 px-2 pb-2">
+          <IconButton accessibilityLabel="Attach receipt" onPress={onAttachReceipt} disabled={uploading}>
+            <Icon name="paperclip" size={20} color={uploading ? '#6E6E73' : '#F5F5F5'} />
+          </IconButton>
+          <View className="flex-1">
+            <TextField placeholder="Message" value={body} onChangeText={setBody} onSubmitEditing={onSend} />
+          </View>
+          <IconButton accessibilityLabel="Send" onPress={onSend} disabled={!body.trim()}>
+            <Icon name="send" size={20} color={body.trim() ? '#A8E8D6' : '#6E6E73'} />
+          </IconButton>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  flex: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 8,
-  },
-  title: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '700',
-    color: COLORS.onBackground,
-  },
-  listContent: {
-    paddingVertical: 12,
-  },
-  cardRow: {
-    paddingHorizontal: 12,
-    marginVertical: 4,
-    alignItems: 'flex-start',
-  },
-  inputBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingBottom: 8,
-  },
-  input: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-  },
-});
