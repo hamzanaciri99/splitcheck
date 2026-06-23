@@ -11,15 +11,18 @@
     "@splitcheck/core": "*"
   },
   "peerDependencies": {
+    "nativewind": "*",
     "react": "*",
     "react-native": "*",
     "react-native-paper": "*"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "nativewind": "^4.2.6",
     "react": "19.2.3",
     "react-native": "0.85.3",
     "react-native-paper": "^5.15.3",
+    "tailwindcss": "^3.4.19",
     "typescript": "~6.0.3"
   }
 }

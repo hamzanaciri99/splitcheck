@@ -15,6 +15,7 @@
     "@splitcheck/core": "*",
     "@splitcheck/ui": "*",
     "expo-asset": "^56.0.17",
+    "nativewind": "^4.2.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native-paper": "^5.15.3",
@@ -29,7 +30,10 @@
     "@types/react": "19.2.2",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.2.0",
+    "autoprefixer": "^10.5.1",
     "oxlint": "^1.69.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
     "typescript": "~6.0.2",
     "vite": "^6.4.3"
   }
