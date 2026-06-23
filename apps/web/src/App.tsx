@@ -1,8 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { PaperProvider } from 'react-native-paper';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { theme } from '@splitcheck/ui';
 import { useAuthStore } from './store/useAuthStore';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -37,60 +35,58 @@ export default function App() {
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <PaperProvider theme={theme}>
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/login"
-              element={
-                <RedirectIfAuthed>
-                  <LoginPage />
-                </RedirectIfAuthed>
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                <RedirectIfAuthed>
-                  <SignupPage />
-                </RedirectIfAuthed>
-              }
-            />
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <ChatListPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/chat/:conversationId"
-              element={
-                <RequireAuth>
-                  <ChatThreadPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/new-split/:conversationId"
-              element={
-                <RequireAuth>
-                  <NewSplitPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/history"
-              element={
-                <RequireAuth>
-                  <HistoryPage />
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </PaperProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <RedirectIfAuthed>
+                <LoginPage />
+              </RedirectIfAuthed>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <RedirectIfAuthed>
+                <SignupPage />
+              </RedirectIfAuthed>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <ChatListPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/chat/:conversationId"
+            element={
+              <RequireAuth>
+                <ChatThreadPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/new-split/:conversationId"
+            element={
+              <RequireAuth>
+                <NewSplitPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <RequireAuth>
+                <HistoryPage />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </GoogleOAuthProvider>
   );
 }

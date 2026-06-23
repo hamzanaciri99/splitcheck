@@ -18,7 +18,6 @@
     "nativewind": "^4.2.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-native-paper": "^5.15.3",
     "react-native-safe-area-context": "*",
     "react-native-web": "^0.21.2",
     "react-router-dom": "^7.1.1",

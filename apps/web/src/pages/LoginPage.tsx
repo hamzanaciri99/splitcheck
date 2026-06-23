@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { View, Text } from 'react-native';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from '@splitcheck/ui';
+import { Button, TextField } from '@splitcheck/ui';
 import { useAuthStore } from '../store/useAuthStore';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -29,14 +28,15 @@ export default function LoginPage() {
   };
 
   return (
-    <View style={styles.page}>
-      <View style={styles.card}>
-        <Text style={styles.title}>SplitCheck</Text>
-        <Text style={styles.subtitle}>Track shared checks with friends. No payments here.</Text>
+    <View className="flex-1 bg-canvas items-center justify-center p-6" style={{ minHeight: '100vh' as unknown as number }}>
+      <View className="w-full max-w-[380px] gap-3">
+        <Text className="text-text-primary text-[30px] font-extrabold">SplitCheck</Text>
+        <Text className="text-text-secondary text-sm mb-2">Track shared checks with friends. No payments here.</Text>
 
         {GOOGLE_CLIENT_ID ? (
-          <View style={styles.googleButton}>
+          <View className="mb-1">
             <GoogleLogin
+              theme="filled_black"
               onSuccess={(resp) => {
                 if (resp.credential) {
                   loginWithGoogle(resp.credential).catch((e) =>
@@ -48,73 +48,24 @@ export default function LoginPage() {
             />
           </View>
         ) : (
-          <Text style={styles.hint}>Google sign-in needs VITE_GOOGLE_CLIENT_ID configured.</Text>
+          <Text className="text-text-secondary text-xs">Google sign-in needs VITE_GOOGLE_CLIENT_ID configured.</Text>
         )}
 
-        <TextInput
-          mode="outlined"
-          label="Email"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-        />
-        <TextInput mode="outlined" label="Password" secureTextEntry value={password} onChangeText={setPassword} style={styles.input} />
+        <TextField label="Email" autoCapitalize="none" value={email} onChangeText={setEmail} />
+        <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Text className="text-negative text-[13px]">{error}</Text>}
 
-        <Button mode="contained" loading={busy} disabled={busy || !email || !password} onPress={onSubmit} style={styles.button}>
-          Sign In
-        </Button>
+        <View className="mt-1">
+          <Button variant="primary" fullWidth loading={busy} disabled={busy || !email || !password} onPress={onSubmit}>
+            Sign In
+          </Button>
+        </View>
 
-        <Button mode="text" onPress={() => navigate('/signup')}>
+        <Button variant="ghost" onPress={() => navigate('/signup')}>
           Don&apos;t have an account? Create one
         </Button>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    minHeight: '100vh' as unknown as number,
-    backgroundColor: COLORS.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  card: {
-    width: '100%',
-    maxWidth: 380,
-    gap: 12,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: COLORS.onSurfaceVariant,
-    marginBottom: 8,
-  },
-  googleButton: {
-    marginBottom: 4,
-  },
-  input: {
-    backgroundColor: COLORS.surface,
-  },
-  button: {
-    borderRadius: 24,
-    marginTop: 4,
-  },
-  error: {
-    color: COLORS.error,
-    fontSize: 13,
-  },
-  hint: {
-    color: COLORS.onSurfaceVariant,
-    fontSize: 12,
-  },
-});

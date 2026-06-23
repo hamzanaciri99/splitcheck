@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Message } from '@splitcheck/core';
-import { MessageBubble, SplitRequestCard, COLORS } from '@splitcheck/ui';
+import { MessageBubble, SplitRequestCard, Button, TextField } from '@splitcheck/ui';
 import { useAuthStore } from '../store/useAuthStore';
 import { useChatStore, conversationTitle } from '../store/useChatStore';
 import { useSplitDraftStore } from '../store/useSplitDraftStore';
@@ -88,28 +87,30 @@ export default function ChatThreadPage() {
   };
 
   return (
-    <View style={styles.page}>
+    <View className="flex-1 bg-canvas" style={{ minHeight: '100vh' as unknown as number }}>
       <AppHeader />
 
-      <View style={styles.threadHeader}>
-        <Button mode="text" compact onPress={() => navigate('/')}>
-          &larr; Back
+      <View className="flex-row items-center max-w-[640px] w-full self-center px-3">
+        <Button variant="ghost" onPress={() => navigate('/')}>
+          ← Back
         </Button>
-        <Text style={styles.title}>{conversation ? conversationTitle(conversation, user.id) : ''}</Text>
-        <Button mode="text" compact onPress={() => openSplitComposer(null, '', [])} disabled={!conversation}>
+        <Text className="flex-1 text-text-primary font-bold text-[16px]">
+          {conversation ? conversationTitle(conversation, user.id) : ''}
+        </Text>
+        <Button variant="ghost" onPress={() => openSplitComposer(null, '', [])} disabled={!conversation}>
           New Split
         </Button>
       </View>
 
       <ScrollView
         ref={scrollRef}
-        style={styles.list}
-        contentContainerStyle={styles.listContent}
+        className="flex-1"
+        contentContainerClassName="max-w-[640px] w-full self-center py-3"
         onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
       >
         {threadMessages.map((item) =>
           item.type === 'SPLIT_REQUEST' && item.check ? (
-            <View key={item.id} style={styles.cardRow}>
+            <View key={item.id} className="px-3 my-1 items-start">
               <SplitRequestCard
                 check={item.check}
                 currentUserId={user.id}
@@ -122,79 +123,18 @@ export default function ChatThreadPage() {
         )}
       </ScrollView>
 
-      <View style={styles.inputBar}>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={onFileChosen}
-        />
-        <Button mode="text" compact loading={uploading} disabled={uploading} onPress={() => fileInputRef.current?.click()}>
+      <View className="flex-row items-center gap-2 max-w-[640px] w-full self-center px-2 pb-3">
+        <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onFileChosen} />
+        <Button variant="ghost" loading={uploading} disabled={uploading} onPress={() => fileInputRef.current?.click()}>
           Attach
         </Button>
-        <TextInput
-          mode="outlined"
-          placeholder="Message"
-          value={body}
-          onChangeText={setBody}
-          onSubmitEditing={onSend}
-          style={styles.input}
-          dense
-        />
-        <Button mode="contained" compact onPress={onSend} disabled={!body.trim()}>
+        <View className="flex-1">
+          <TextField placeholder="Message" value={body} onChangeText={setBody} onSubmitEditing={onSend} />
+        </View>
+        <Button variant="primary" onPress={onSend} disabled={!body.trim()}>
           Send
         </Button>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    minHeight: '100vh' as unknown as number,
-    backgroundColor: COLORS.background,
-  },
-  threadHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    maxWidth: 640,
-    width: '100%',
-    alignSelf: 'center',
-    paddingHorizontal: 12,
-  },
-  title: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '700',
-    color: COLORS.onBackground,
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    maxWidth: 640,
-    width: '100%',
-    alignSelf: 'center',
-    paddingVertical: 12,
-  },
-  cardRow: {
-    paddingHorizontal: 12,
-    marginVertical: 4,
-    alignItems: 'flex-start',
-  },
-  inputBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    maxWidth: 640,
-    width: '100%',
-    alignSelf: 'center',
-    paddingHorizontal: 8,
-    paddingBottom: 12,
-  },
-  input: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-  },
-});

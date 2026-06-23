@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { Button } from 'react-native-paper';
-import { ActivityItemRow, COLORS } from '@splitcheck/ui';
+import { View, Text, ScrollView } from 'react-native';
+import { ActivityItemRow, Button } from '@splitcheck/ui';
 import { useAuthStore } from '../store/useAuthStore';
 import { useSplitStore } from '../store/useSplitStore';
 import { api, API_URL } from '../api/client';
@@ -46,30 +45,25 @@ export default function HistoryPage() {
   };
 
   return (
-    <View style={styles.page}>
+    <View className="flex-1 bg-canvas" style={{ minHeight: '100vh' as unknown as number }}>
       <AppHeader />
 
-      <View style={styles.content}>
-        <View style={styles.header}>
+      <View className="flex-1 max-w-[640px] w-full self-center p-5">
+        <View className="flex-row justify-between items-center mb-2">
           <View>
-            <Text style={styles.title}>History</Text>
-            <Text style={styles.subtitle}>Settled & completed splits</Text>
+            <Text className="text-text-primary text-[22px] font-extrabold">History</Text>
+            <Text className="text-text-secondary text-[13px] mt-0.5">Settled & completed splits</Text>
           </View>
-          <Button
-            mode="text"
-            compact
-            accessibilityLabel="Export CSV"
-            loading={exporting}
-            disabled={exporting}
-            onPress={onExportCsv}
-          >
+          <Button variant="ghost" accessibilityLabel="Export CSV" loading={exporting} disabled={exporting} onPress={onExportCsv}>
             Export CSV
           </Button>
         </View>
 
-        <ScrollView style={styles.list}>
+        <ScrollView className="flex-1 bg-surface rounded-2xl">
           {settledReceipts.length === 0 ? (
-            <Text style={styles.empty}>Settled splits will appear here once everyone pays up.</Text>
+            <Text className="p-6 text-center text-text-secondary">
+              Settled splits will appear here once everyone pays up.
+            </Text>
           ) : (
             settledReceipts.map((receipt) => <ActivityItemRow key={receipt.id} receipt={receipt} />)
           )}
@@ -78,44 +72,3 @@ export default function HistoryPage() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    minHeight: '100vh' as unknown as number,
-    backgroundColor: COLORS.background,
-  },
-  content: {
-    flex: 1,
-    maxWidth: 640,
-    width: '100%',
-    alignSelf: 'center',
-    padding: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: COLORS.onSurfaceVariant,
-    marginTop: 2,
-  },
-  list: {
-    flex: 1,
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-  },
-  empty: {
-    padding: 24,
-    textAlign: 'center',
-    color: COLORS.onSurfaceVariant,
-  },
-});

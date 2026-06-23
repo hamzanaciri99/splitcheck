@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { View, Text } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from '@splitcheck/ui';
+import { Button, TextField } from '@splitcheck/ui';
 import { useAuthStore } from '../store/useAuthStore';
 
 export default function SignupPage() {
@@ -27,76 +26,33 @@ export default function SignupPage() {
   };
 
   return (
-    <View style={styles.page}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Create Account</Text>
+    <View className="flex-1 bg-canvas items-center justify-center p-6" style={{ minHeight: '100vh' as unknown as number }}>
+      <View className="w-full max-w-[380px] gap-3">
+        <Text className="text-text-primary text-2xl font-extrabold mb-2">Create Account</Text>
 
-        <TextInput mode="outlined" label="Name" value={displayName} onChangeText={setDisplayName} style={styles.input} />
-        <TextInput
-          mode="outlined"
-          label="Email"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-        />
-        <TextInput mode="outlined" label="Password" secureTextEntry value={password} onChangeText={setPassword} style={styles.input} />
-        <Text style={styles.helper}>At least 8 characters.</Text>
+        <TextField label="Name" value={displayName} onChangeText={setDisplayName} />
+        <TextField label="Email" autoCapitalize="none" value={email} onChangeText={setEmail} />
+        <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
+        <Text className="text-text-secondary text-xs -mt-2">At least 8 characters.</Text>
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        {error && <Text className="text-negative text-[13px]">{error}</Text>}
 
-        <Button
-          mode="contained"
-          loading={busy}
-          disabled={busy || !email || !password || !displayName}
-          onPress={onSubmit}
-          style={styles.button}
-        >
-          Create Account
-        </Button>
+        <View className="mt-1">
+          <Button
+            variant="primary"
+            fullWidth
+            loading={busy}
+            disabled={busy || !email || !password || !displayName}
+            onPress={onSubmit}
+          >
+            Create Account
+          </Button>
+        </View>
 
-        <Button mode="text" onPress={() => navigate('/login')}>
+        <Button variant="ghost" onPress={() => navigate('/login')}>
           Already have an account? Sign in
         </Button>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    minHeight: '100vh' as unknown as number,
-    backgroundColor: COLORS.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  card: {
-    width: '100%',
-    maxWidth: 380,
-    gap: 12,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: COLORS.onBackground,
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: COLORS.surface,
-  },
-  helper: {
-    fontSize: 12,
-    color: COLORS.onSurfaceVariant,
-    marginTop: -8,
-  },
-  button: {
-    borderRadius: 24,
-    marginTop: 4,
-  },
-  error: {
-    color: COLORS.error,
-    fontSize: 13,
-  },
-});
