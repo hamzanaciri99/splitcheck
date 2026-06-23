@@ -1,6 +1,7 @@
 export * from './theme';
 export * from './components/Button';
 export * from './components/Card';
+export * from './components/Icon';
 export * from './components/IconButton';
 export * from './components/TextField';
 export * from './components/ProgressBar';
