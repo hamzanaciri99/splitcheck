@@ -15,7 +15,7 @@ export default function ActivityScreen() {
   }, [user]);
 
   return (
-    <SafeAreaView className="flex-1 bg-base" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
       <View className="flex-row justify-between items-center px-5 py-3">
         <View className="flex-row items-center gap-3">
           <IconButton accessibilityLabel="Menu" onPress={() => {}}>

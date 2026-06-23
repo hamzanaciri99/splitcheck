@@ -41,7 +41,7 @@ export default function CheckDetailScreen() {
 
   if (loading || !check || !user) {
     return (
-      <SafeAreaView className="flex-1 bg-base items-center justify-center">
+      <SafeAreaView className="flex-1 bg-canvas items-center justify-center">
         <ActivityIndicator color="#A8E8D6" />
       </SafeAreaView>
     );
@@ -60,7 +60,7 @@ export default function CheckDetailScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-base">
+    <SafeAreaView className="flex-1 bg-canvas">
       <View className="flex-row items-center px-2 py-2">
         <IconButton accessibilityLabel="Back" onPress={() => router.back()}>
           <Icon name="arrow-left" size={20} color="#F5F5F5" />

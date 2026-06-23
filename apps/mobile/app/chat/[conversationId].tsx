@@ -92,13 +92,8 @@ export default function ChatThreadScreen() {
   const onAttachReceipt = () => {
     Alert.alert('Attach Receipt', undefined, [
       {
-        text: 'Take Photo',
-        onPress: async () => {
-          const permission = await ImagePicker.requestCameraPermissionsAsync();
-          if (!permission.granted) return;
-          const result = await ImagePicker.launchCameraAsync({ quality: 0.8 });
-          if (!result.canceled) await uploadAsset(result.assets[0]);
-        },
+        text: 'Scan Receipt',
+        onPress: () => router.push({ pathname: '/scan/[conversationId]', params: { conversationId } }),
       },
       {
         text: 'Choose from Library',

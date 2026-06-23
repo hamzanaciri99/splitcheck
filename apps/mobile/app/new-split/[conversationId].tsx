@@ -49,7 +49,7 @@ export default function NewSplitScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-base">
+    <SafeAreaView className="flex-1 bg-canvas">
       <View className="flex-row items-center px-2 py-2">
         <IconButton accessibilityLabel="Close" onPress={() => router.back()}>
           <Icon name="close" size={20} color="#F5F5F5" />

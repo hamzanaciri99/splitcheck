@@ -41,6 +41,7 @@ function RootLayout() {
           <Stack.Screen name="new-chat" options={{ headerShown: false, presentation: 'modal' }} />
           <Stack.Screen name="new-split/[conversationId]" options={{ headerShown: false, presentation: 'modal' }} />
           <Stack.Screen name="check/[checkId]" options={{ headerShown: false }} />
+          <Stack.Screen name="scan/[conversationId]" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
         </Stack.Protected>
         <Stack.Protected guard={!signedIn}>
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
