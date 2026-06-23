@@ -10,6 +10,8 @@ const envSchema = z.object({
   UPLOADS_DIR: z.string().default('./uploads'),
   ANTHROPIC_API_KEY: z.string().optional(),
   CORS_ORIGIN: z.string().default('*'),
+  SENTRY_DSN: z.string().optional(),
+  NODE_ENV: z.string().default('development'),
 });
 
 export const env = envSchema.parse(process.env);

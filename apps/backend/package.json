@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
+    "@sentry/node": "^10.60.0",
     "@splitcheck/core": "*",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

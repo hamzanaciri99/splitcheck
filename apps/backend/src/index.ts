@@ -1,8 +1,11 @@
+import './instrument';
+
 import http from 'http';
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import * as Sentry from '@sentry/node';
 import { env } from './env';
 import { authRouter } from './routes/auth';
 import { usersRouter } from './routes/users';
@@ -27,6 +30,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/conversations', conversationsRouter);
 app.use('/api', checksRouter);
 
+Sentry.setupExpressErrorHandler(app);
 app.use(errorHandler);
 
 const httpServer = http.createServer(app);
