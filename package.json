@@ -7,6 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:mobile": "npm run start -w @splitcheck/mobile"
+    "dev:mobile": "npm run start -w @splitcheck/mobile",
+    "dev:backend": "npm run dev -w @splitcheck/backend",
+    "dev:web": "npm run dev -w @splitcheck/web",
+    "db:migrate": "npm run db:migrate -w @splitcheck/backend"
   }
 }
