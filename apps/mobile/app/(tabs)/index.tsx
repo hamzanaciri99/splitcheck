@@ -28,26 +28,21 @@ export default function ActivityScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <View className="flex-row items-center justify-between px-gutter h-16 bg-surface/70 backdrop-blur-xl border-b border-white/10">
-        <Text className="font-jakarta-bold font-bold text-[17px] text-primary shrink" numberOfLines={1}>
-          SplitCheck
-        </Text>
-        <View className="flex-row items-center gap-2">
-          <IconButton accessibilityLabel="Notifications" size={36} onPress={() => router.push('/notifications')}>
-            <Icon name="bell" size={20} color="#d5e8ec" />
-          </IconButton>
-          <SearchBar
-            editable={false}
-            containerClassName="w-[88px]"
-            onPress={() => router.push('/(tabs)/chat?focusSearch=1')}
-          />
-          <UserAvatarButton
-            displayName={user.displayName}
-            avatarColor={user.avatarColor}
-            size={32}
-            onPress={() => router.push('/(tabs)/profile')}
-          />
-        </View>
+      <View className="flex-row items-center gap-2.5 px-gutter h-16 bg-surface/70 backdrop-blur-xl border-b border-white/10">
+        <IconButton accessibilityLabel="Notifications" size={36} onPress={() => router.push('/notifications')}>
+          <Icon name="bell" size={20} color="#d5e8ec" />
+        </IconButton>
+        <SearchBar
+          editable={false}
+          containerClassName="flex-1"
+          onPress={() => router.push('/(tabs)/chat?focusSearch=1')}
+        />
+        <UserAvatarButton
+          displayName={user.displayName}
+          avatarColor={user.avatarColor}
+          size={36}
+          onPress={() => router.push('/(tabs)/profile')}
+        />
       </View>
 
       <ScrollView className="flex-1" contentContainerClassName="pt-6 px-gutter pb-32" showsVerticalScrollIndicator={false}>
