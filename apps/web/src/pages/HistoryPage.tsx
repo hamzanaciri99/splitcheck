@@ -45,23 +45,23 @@ export default function HistoryPage() {
   };
 
   return (
-    <View className="flex-1 bg-canvas" style={{ minHeight: '100vh' as unknown as number }}>
+    <View className="flex-1 bg-background" style={{ minHeight: '100vh' as unknown as number }}>
       <AppHeader />
 
       <View className="flex-1 max-w-[640px] w-full self-center p-5">
         <View className="flex-row justify-between items-center mb-2">
           <View>
-            <Text className="text-text-primary text-[22px] font-extrabold">History</Text>
-            <Text className="text-text-secondary text-[13px] mt-0.5">Settled & completed splits</Text>
+            <Text className="text-on-background text-[22px] font-extrabold">History</Text>
+            <Text className="text-on-surface-variant text-[13px] mt-0.5">Settled & completed splits</Text>
           </View>
           <Button variant="ghost" accessibilityLabel="Export CSV" loading={exporting} disabled={exporting} onPress={onExportCsv}>
             Export CSV
           </Button>
         </View>
 
-        <ScrollView className="flex-1 bg-surface rounded-2xl">
+        <ScrollView className="flex-1 bg-surface-container rounded-2xl">
           {settledReceipts.length === 0 ? (
-            <Text className="p-6 text-center text-text-secondary">
+            <Text className="p-6 text-center text-on-surface-variant">
               Settled splits will appear here once everyone pays up.
             </Text>
           ) : (

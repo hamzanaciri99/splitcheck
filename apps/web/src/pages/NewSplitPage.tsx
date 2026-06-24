@@ -50,37 +50,37 @@ export default function NewSplitPage() {
   };
 
   return (
-    <View className="flex-1 bg-canvas" style={{ minHeight: '100vh' as unknown as number }}>
+    <View className="flex-1 bg-background" style={{ minHeight: '100vh' as unknown as number }}>
       <AppHeader />
 
       <View className="flex-row items-center max-w-[640px] w-full self-center">
         <Button variant="ghost" onPress={() => navigate(`/chat/${conversationId}`)}>
           Close
         </Button>
-        <Text className="text-text-primary text-[17px] font-bold">New Split</Text>
+        <Text className="text-on-background text-[17px] font-bold">New Split</Text>
       </View>
 
       <ScrollView className="flex-1" contentContainerClassName="max-w-[640px] w-full self-center p-4 pb-8 gap-2">
         <TextField placeholder="What's this for?" value={title} onChangeText={setTitle} className="mb-2" />
 
-        <Text className="text-text-secondary text-xs font-bold uppercase tracking-wide mt-3 mb-1">Items</Text>
+        <Text className="text-on-surface-variant text-xs font-bold uppercase tracking-wide mt-3 mb-1">Items</Text>
         {items.map((item, index) => (
           <TouchableOpacity
             key={item.id}
-            className={`flex-row items-center bg-surface rounded-xl px-3 py-2.5 mb-1.5 border ${
-              index === selectedItemIndex ? 'border-accent' : 'border-transparent'
+            className={`flex-row items-center bg-surface-container rounded-xl px-3 py-2.5 mb-1.5 border ${
+              index === selectedItemIndex ? 'border-primary' : 'border-transparent'
             }`}
             onPress={() => selectItem(index)}
           >
             <View className="flex-1">
-              <Text className="text-text-primary text-sm font-semibold">{item.name}</Text>
-              <Text className="text-text-secondary text-[11px] mt-0.5">
+              <Text className="text-on-background text-sm font-semibold">{item.name}</Text>
+              <Text className="text-on-surface-variant text-[11px] mt-0.5">
                 {item.assignedUserIds.length === 0
                   ? 'Tap avatars below to assign'
                   : `Split between ${item.assignedUserIds.length} ${item.assignedUserIds.length === 1 ? 'person' : 'people'}`}
               </Text>
             </View>
-            <Text className="text-text-primary text-sm font-bold mr-1">{formatCurrencyCents(item.priceCents)}</Text>
+            <Text className="text-on-background text-sm font-bold mr-1">{formatCurrencyCents(item.priceCents)}</Text>
             <Button variant="ghost" accessibilityLabel={`Remove ${item.name}`} onPress={() => removeItem(index)}>
               Remove
             </Button>
@@ -101,7 +101,7 @@ export default function NewSplitPage() {
 
         {items.length > 0 && (
           <>
-            <Text className="text-text-secondary text-xs font-bold uppercase tracking-wide mt-3 mb-1">
+            <Text className="text-on-surface-variant text-xs font-bold uppercase tracking-wide mt-3 mb-1">
               {selectedItemIndex < items.length ? `Who shares "${items[selectedItemIndex].name}"?` : 'Select an item'}
             </Text>
             <View className="flex-row flex-wrap gap-3">
@@ -117,13 +117,13 @@ export default function NewSplitPage() {
           </>
         )}
 
-        {error && <Text className="text-negative text-[13px] mt-2">{error}</Text>}
+        {error && <Text className="text-error text-[13px] mt-2">{error}</Text>}
       </ScrollView>
 
-      <View className="max-w-[640px] w-full self-center p-4 border-t border-border">
+      <View className="max-w-[640px] w-full self-center p-4 border-t border-outline-variant">
         <View className="flex-row justify-between mb-3">
-          <Text className="text-text-secondary text-sm">Total</Text>
-          <Text className="text-text-primary text-lg font-extrabold">{formatCurrencyCents(totalCents)}</Text>
+          <Text className="text-on-surface-variant text-sm">Total</Text>
+          <Text className="text-on-background text-lg font-extrabold">{formatCurrencyCents(totalCents)}</Text>
         </View>
         <Button variant="primary" fullWidth loading={submitting} disabled={submitting || items.length === 0} onPress={onSubmit}>
           Send Split Request

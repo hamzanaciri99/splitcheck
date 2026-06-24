@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import type { ActivityReceipt } from '@splitcheck/core';
 import { getAvatarInitials, getAvatarColor } from '@splitcheck/core';
+import { LabelSm } from './Typography';
 
 type Props = {
   receipt: ActivityReceipt;
@@ -16,45 +17,41 @@ export function ActivityItemRow({ receipt, onPress }: Props) {
   const avatarColor = getAvatarColor(receipt.title);
   const isPayerMe = receipt.isMine;
 
-  const subtitle = receipt.isSettled
-    ? 'All settled'
-    : isPayerMe
-    ? `Paid by You • ${receipt.date}`
-    : `Paid by ${receipt.payer} • ${receipt.date}`;
+  const subtitle = isPayerMe ? `Paid by You • ${receipt.date}` : `Paid by ${receipt.payer} • ${receipt.date}`;
+  const caption = receipt.isSettled ? 'All settled' : isPayerMe ? "You're owed back" : `${receipt.payer} is owed`;
 
-  const amountClass = receipt.isSettled ? 'text-text-secondary' : isPayerMe ? 'text-positive' : 'text-negative';
+  const amountClass = receipt.isSettled ? 'text-on-surface-variant' : isPayerMe ? 'text-primary' : 'text-error';
   const amountPrefix = receipt.isSettled ? '' : isPayerMe ? '+' : '-';
 
   return (
     <TouchableOpacity
-      className="flex-row items-center px-4 py-3"
+      className="flex-row items-center p-stack-md bg-surface-container border border-white/5 rounded-xl active:scale-[0.98]"
       onPress={onPress}
-      activeOpacity={0.7}
+      activeOpacity={0.85}
       disabled={!onPress}
     >
-      <View className="w-11 h-11 rounded-full items-center justify-center mr-3" style={{ backgroundColor: avatarColor }}>
-        <Text className="text-white text-sm font-bold">{initials}</Text>
+      <View
+        className="w-12 h-12 rounded-full items-center justify-center mr-stack-md border border-white/10"
+        style={{ backgroundColor: avatarColor }}
+      >
+        <Text className="text-white text-sm font-inter-bold font-bold">{initials}</Text>
       </View>
 
       <View className="flex-1 mr-2">
-        <Text className="text-text-primary text-[15px] font-semibold" numberOfLines={1}>
+        <Text className="font-sans font-bold text-[16px] text-on-surface" numberOfLines={1}>
           {receipt.title}
         </Text>
-        <Text className="text-text-secondary text-xs mt-0.5" numberOfLines={1}>
+        <LabelSm className="text-on-surface-variant" numberOfLines={1}>
           {subtitle}
-        </Text>
+        </LabelSm>
       </View>
 
       <View className="items-end">
-        <Text className={`text-[15px] font-bold ${amountClass}`}>
+        <Text className={`font-jakarta-bold font-bold ${amountClass}`}>
           {amountPrefix}
           {formatCurrency(receipt.totalAmount)}
         </Text>
-        {receipt.isSettled && (
-          <View className="mt-1 bg-surface-alt rounded-md px-1.5 py-0.5">
-            <Text className="text-[10px] text-text-secondary font-semibold">Settled</Text>
-          </View>
-        )}
+        <LabelSm className="text-on-surface-variant mt-0.5">{caption}</LabelSm>
       </View>
     </TouchableOpacity>
   );

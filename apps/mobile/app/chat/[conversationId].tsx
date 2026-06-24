@@ -94,12 +94,12 @@ export default function ChatThreadScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <View className="flex-row items-center pr-2">
         <IconButton accessibilityLabel="Back" onPress={() => router.back()}>
-          <Icon name="arrow-left" size={20} color="#F5F5F5" />
+          <Icon name="arrow-left" size={20} color="#d5e8ec" />
         </IconButton>
-        <Text className="flex-1 text-text-primary text-[16px] font-bold" numberOfLines={1}>
+        <Text className="flex-1 font-sans text-on-background text-[16px] font-bold" numberOfLines={1}>
           {conversation ? conversationTitle(conversation, user.id) : ''}
         </Text>
         <IconButton
@@ -107,7 +107,7 @@ export default function ChatThreadScreen() {
           onPress={() => openSplitComposer(null, '', [])}
           disabled={!conversation}
         >
-          <Icon name="receipt" size={20} color="#F5F5F5" />
+          <Icon name="receipt" size={20} color="#d5e8ec" />
         </IconButton>
       </View>
 
@@ -137,13 +137,13 @@ export default function ChatThreadScreen() {
 
         <View className="flex-row items-center gap-2 px-2 pb-2">
           <IconButton accessibilityLabel="Attach receipt" onPress={onAttachReceipt} disabled={uploading}>
-            <Icon name="paperclip" size={20} color={uploading ? '#6E6E73' : '#F5F5F5'} />
+            <Icon name="paperclip" size={20} color={uploading ? '#6E6E73' : '#e5e2e1'} />
           </IconButton>
           <View className="flex-1">
             <TextField placeholder="Message" value={body} onChangeText={setBody} onSubmitEditing={onSend} />
           </View>
           <IconButton accessibilityLabel="Send" onPress={onSend} disabled={!body.trim()}>
-            <Icon name="send" size={20} color={body.trim() ? '#A8E8D6' : '#6E6E73'} />
+            <Icon name="send" size={20} color={body.trim() ? '#d5e8ec' : '#6E6E73'} />
           </IconButton>
         </View>
       </KeyboardAvoidingView>

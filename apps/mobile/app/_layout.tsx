@@ -3,6 +3,12 @@ import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Sentry from '@sentry/react-native';
+import { useFonts } from 'expo-font';
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import {
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+} from '@expo-google-fonts/plus-jakarta-sans';
 import { useAuthStore } from '@/store/useAuthStore';
 
 SplashScreen.preventAutoHideAsync();
@@ -15,18 +21,26 @@ Sentry.init({
 function RootLayout() {
   const status = useAuthStore((s) => s.status);
   const bootstrap = useAuthStore((s) => s.bootstrap);
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+  });
 
   useEffect(() => {
     bootstrap();
   }, []);
 
   useEffect(() => {
-    if (status !== 'loading') {
+    if (status !== 'loading' && fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [status]);
+  }, [status, fontsLoaded]);
 
-  if (status === 'loading') return null;
+  if (status === 'loading' || !fontsLoaded) return null;
 
   const signedIn = status === 'signedIn';
 

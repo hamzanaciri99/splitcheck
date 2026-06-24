@@ -10,7 +10,11 @@ type Props = {
 export function MessageBubble({ message, isMine, baseUrl }: Props) {
   return (
     <View className={`flex-row my-1 px-3 ${isMine ? 'justify-end' : 'justify-start'}`}>
-      <View className={`max-w-[78%] rounded-[18px] px-3.5 py-2.5 ${isMine ? 'bg-card-purple' : 'bg-surface'}`}>
+      <View
+        className={`max-w-[78%] rounded-[18px] px-3.5 py-2.5 ${
+          isMine ? 'bg-primary' : 'bg-surface-container border border-outline-variant'
+        }`}
+      >
         {message.type === 'RECEIPT' && message.attachment ? (
           <Image
             source={{ uri: `${baseUrl}${message.attachment.url}` }}
@@ -18,7 +22,7 @@ export function MessageBubble({ message, isMine, baseUrl }: Props) {
             resizeMode="cover"
           />
         ) : (
-          <Text className={`text-[15px] ${isMine ? 'text-white' : 'text-text-primary'}`}>{message.body}</Text>
+          <Text className={`font-sans text-[15px] ${isMine ? 'text-on-primary' : 'text-on-surface'}`}>{message.body}</Text>
         )}
       </View>
     </View>

@@ -9,9 +9,9 @@ export function AppHeader() {
   const logout = useAuthStore((s) => s.logout);
 
   return (
-    <View className="flex-row items-center justify-between px-5 py-2.5 bg-surface border-b border-border">
+    <View className="flex-row items-center justify-between px-gutter py-2.5 bg-surface/70 backdrop-blur-xl border-b border-white/10">
       <View className="flex-row items-center gap-2">
-        <Text className="text-text-primary text-[17px] font-extrabold mr-2">SplitCheck</Text>
+        <Text className="font-jakarta-bold font-bold text-[17px] text-primary mr-2">SplitCheck</Text>
         <Button variant="ghost" onPress={() => navigate('/')}>
           Chats
         </Button>
@@ -20,7 +20,7 @@ export function AppHeader() {
         </Button>
       </View>
       <View className="flex-row items-center gap-2">
-        <Text className="text-text-secondary text-[13px]">{user?.displayName}</Text>
+        <Text className="font-sans text-on-surface-variant text-[13px]">{user?.displayName}</Text>
         <Button variant="destructive" onPress={() => logout()}>
           Sign Out
         </Button>

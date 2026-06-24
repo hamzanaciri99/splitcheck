@@ -31,7 +31,14 @@ export type IconName =
   | 'globe'
   | 'moon'
   | 'info'
-  | 'trash';
+  | 'trash'
+  | 'trending-up'
+  | 'wallet'
+  | 'payments'
+  | 'lightbulb'
+  | 'photo-library'
+  | 'analytics'
+  | 'person-placeholder';
 
 type Props = {
   name: IconName;
@@ -277,6 +284,62 @@ export function Icon({ name, size = 24, color = '#F5F5F5' }: Props) {
       return (
         <Svg {...common}>
           <Path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" />
+        </Svg>
+      );
+    case 'trending-up':
+      return (
+        <Svg {...common}>
+          <Path d="M23 6l-9.5 9.5-5-5L1 18" />
+          <Path d="M17 6h6v6" />
+        </Svg>
+      );
+    case 'wallet':
+      return (
+        <Svg {...common}>
+          <Path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5z" />
+          <Path d="M16 12h3" />
+        </Svg>
+      );
+    case 'payments':
+      return (
+        <Svg {...common}>
+          <Circle cx="12" cy="12" r="9" />
+          <Path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 1.5-2.5 1.8-2.5 3.5" />
+          <Line x1="12" y1="16.5" x2="12" y2="16.5" />
+          <Line x1="12" y1="6" x2="12" y2="7.5" />
+        </Svg>
+      );
+    case 'lightbulb':
+      return (
+        <Svg {...common}>
+          <Path d="M9 18h6" />
+          <Path d="M10 22h4" />
+          <Path d="M12 2a6 6 0 0 0-4 10.5c.6.5 1 1.3 1 2.1V16h6v-1.4c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 2z" />
+        </Svg>
+      );
+    case 'photo-library':
+      return (
+        <Svg {...common}>
+          <Path d="M4 7h13a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z" />
+          <Path d="M7 7V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73" />
+          <Circle cx="9.5" cy="12.5" r="1.5" />
+          <Path d="M19 17l-4-4-3 3-2-2-3 3" />
+        </Svg>
+      );
+    case 'analytics':
+      return (
+        <Svg {...common}>
+          <Line x1="4" y1="20" x2="4" y2="13" />
+          <Line x1="10" y1="20" x2="10" y2="4" />
+          <Line x1="16" y1="20" x2="16" y2="10" />
+          <Line x1="22" y1="20" x2="22" y2="16" />
+        </Svg>
+      );
+    case 'person-placeholder':
+      return (
+        <Svg {...common}>
+          <Circle cx="12" cy="8" r="4" />
+          <Path d="M4 21v-1a8 8 0 0 1 16 0v1" />
         </Svg>
       );
     default:

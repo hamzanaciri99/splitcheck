@@ -34,15 +34,15 @@ export default function NewChatScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-canvas">
+    <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center px-1">
         <IconButton accessibilityLabel="Close" onPress={() => router.back()}>
-          <Icon name="close" size={20} color="#F5F5F5" />
+          <Icon name="close" size={20} color="#d5e8ec" />
         </IconButton>
-        <Text className="text-text-primary text-[17px] font-bold ml-1">New Chat</Text>
+        <Text className="font-sans text-on-background text-[17px] font-bold ml-1">New Chat</Text>
       </View>
 
-      <View className="p-5 gap-2">
+      <View className="p-gutter gap-2">
         <TextField
           label="Friend's email"
           autoCapitalize="none"
@@ -51,7 +51,7 @@ export default function NewChatScreen() {
           onChangeText={setEmail}
         />
 
-        {error && <Text className="text-negative text-[13px]">{error}</Text>}
+        {error && <Text className="font-sans text-error text-[13px]">{error}</Text>}
 
         <View className="mt-3">
           <Button variant="primary" fullWidth loading={busy} disabled={busy || !email} onPress={onSubmit}>

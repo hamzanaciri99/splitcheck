@@ -7,6 +7,7 @@ import { useChatStore, conversationTitle, otherParticipants } from '@/store/useC
 import { useAuthStore } from '@/store/useAuthStore';
 import { getAvatarInitials } from '@splitcheck/core';
 import { IconButton, Icon } from '@splitcheck/ui';
+import { AppBottomNav } from '@/components/AppBottomNav';
 
 function previewText(message: Message | null): string {
   if (!message) return 'Say hello';
@@ -28,21 +29,21 @@ export default function ChatListScreen() {
   if (!user) return null;
 
   return (
-    <SafeAreaView className="flex-1 bg-canvas" edges={['top']}>
-      <View className="flex-row justify-between items-center px-5 py-3">
-        <Text className="text-text-primary text-[22px] font-extrabold">Chats</Text>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+      <View className="flex-row justify-between items-center px-gutter py-3">
+        <Text className="font-jakarta-bold font-bold text-[22px] text-on-background">Chats</Text>
         <IconButton accessibilityLabel="New chat" onPress={() => router.push('/new-chat')}>
-          <Icon name="plus" size={20} color="#F5F5F5" />
+          <Icon name="plus" size={20} color="#d5e8ec" />
         </IconButton>
       </View>
 
       <FlatList
         data={conversations}
         keyExtractor={(item) => item.id}
-        contentContainerClassName="pb-6"
+        contentContainerClassName="pb-24"
         ListEmptyComponent={
           <View className="p-10 items-center">
-            <Text className="text-text-secondary text-sm text-center">
+            <Text className="font-sans text-on-surface-variant text-sm text-center">
               No conversations yet. Start one with the + button.
             </Text>
           </View>
@@ -52,23 +53,23 @@ export default function ChatListScreen() {
           const avatarUser = others[0];
           return (
             <TouchableOpacity
-              className="flex-row items-center px-5 py-3"
+              className="flex-row items-center px-gutter py-3"
               activeOpacity={0.7}
               onPress={() => router.push(`/chat/${item.id}`)}
             >
               <View
                 className="w-12 h-12 rounded-full items-center justify-center mr-3"
-                style={{ backgroundColor: avatarUser?.avatarColor ?? '#A8E8D6' }}
+                style={{ backgroundColor: avatarUser?.avatarColor ?? '#d5e8ec' }}
               >
-                <Text className="text-white text-[15px] font-bold">
+                <Text className="text-white text-[15px] font-inter-bold font-bold">
                   {getAvatarInitials(avatarUser?.displayName ?? '?')}
                 </Text>
               </View>
               <View className="flex-1">
-                <Text className="text-text-primary text-[15px] font-semibold" numberOfLines={1}>
+                <Text className="font-sans font-bold text-[15px] text-on-surface" numberOfLines={1}>
                   {conversationTitle(item, user.id)}
                 </Text>
-                <Text className="text-text-secondary text-[13px] mt-0.5" numberOfLines={1}>
+                <Text className="font-sans text-[13px] text-on-surface-variant mt-0.5" numberOfLines={1}>
                   {previewText(item.lastMessage)}
                 </Text>
               </View>
@@ -76,6 +77,8 @@ export default function ChatListScreen() {
           );
         }}
       />
+
+      <AppBottomNav active="chat" />
     </SafeAreaView>
   );
 }

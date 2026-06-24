@@ -87,14 +87,14 @@ export default function ChatThreadPage() {
   };
 
   return (
-    <View className="flex-1 bg-canvas" style={{ minHeight: '100vh' as unknown as number }}>
+    <View className="flex-1 bg-background" style={{ minHeight: '100vh' as unknown as number }}>
       <AppHeader />
 
       <View className="flex-row items-center max-w-[640px] w-full self-center px-3">
         <Button variant="ghost" onPress={() => navigate('/')}>
           ← Back
         </Button>
-        <Text className="flex-1 text-text-primary font-bold text-[16px]">
+        <Text className="flex-1 text-on-background font-bold text-[16px]">
           {conversation ? conversationTitle(conversation, user.id) : ''}
         </Text>
         <Button variant="ghost" onPress={() => openSplitComposer(null, '', [])} disabled={!conversation}>

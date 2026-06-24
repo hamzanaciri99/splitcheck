@@ -28,10 +28,10 @@ export default function LoginPage() {
   };
 
   return (
-    <View className="flex-1 bg-canvas items-center justify-center p-6" style={{ minHeight: '100vh' as unknown as number }}>
+    <View className="flex-1 bg-background items-center justify-center p-6" style={{ minHeight: '100vh' as unknown as number }}>
       <View className="w-full max-w-[380px] gap-3">
-        <Text className="text-text-primary text-[30px] font-extrabold">SplitCheck</Text>
-        <Text className="text-text-secondary text-sm mb-2">Track shared checks with friends. No payments here.</Text>
+        <Text className="text-on-background text-[30px] font-extrabold">SplitCheck</Text>
+        <Text className="text-on-surface-variant text-sm mb-2">Track shared checks with friends. No payments here.</Text>
 
         {GOOGLE_CLIENT_ID ? (
           <View className="mb-1">
@@ -48,13 +48,13 @@ export default function LoginPage() {
             />
           </View>
         ) : (
-          <Text className="text-text-secondary text-xs">Google sign-in needs VITE_GOOGLE_CLIENT_ID configured.</Text>
+          <Text className="text-on-surface-variant text-xs">Google sign-in needs VITE_GOOGLE_CLIENT_ID configured.</Text>
         )}
 
         <TextField label="Email" autoCapitalize="none" value={email} onChangeText={setEmail} />
         <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
 
-        {error && <Text className="text-negative text-[13px]">{error}</Text>}
+        {error && <Text className="text-error text-[13px]">{error}</Text>}
 
         <View className="mt-1">
           <Button variant="primary" fullWidth loading={busy} disabled={busy || !email || !password} onPress={onSubmit}>

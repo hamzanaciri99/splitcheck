@@ -12,9 +12,9 @@ type Props = {
 };
 
 function statusClass(status: CheckParticipantStatus): string {
-  if (status === 'PAID') return 'text-positive';
-  if (status === 'DECLINED') return 'text-negative';
-  return 'text-text-secondary';
+  if (status === 'PAID') return 'text-primary';
+  if (status === 'DECLINED') return 'text-error';
+  return 'text-on-surface-variant';
 }
 
 export function SplitRequestCard({ check, currentUserId, onRespond, onPress }: Props) {
@@ -34,13 +34,13 @@ export function SplitRequestCard({ check, currentUserId, onRespond, onPress }: P
 
   return (
     <TouchableOpacity
-      className="bg-surface rounded-2xl p-3.5 w-72"
+      className="bg-surface-container border border-outline-variant rounded-xl p-stack-md w-72"
       onPress={onPress}
       activeOpacity={onPress ? 0.8 : 1}
       disabled={!onPress}
     >
-      <Text className="text-text-primary text-[15px] font-bold">{check.title}</Text>
-      <Text className="text-text-secondary text-xs mt-0.5 mb-2.5">
+      <Text className="font-sans font-bold text-[15px] text-on-surface">{check.title}</Text>
+      <Text className="font-sans text-[12px] text-on-surface-variant mt-0.5 mb-2.5">
         Requested by {isCreator ? 'you' : check.createdBy.displayName} &middot;{' '}
         {formatCurrencyCents(check.totalAmountCents, check.currency)}
       </Text>
@@ -48,10 +48,10 @@ export function SplitRequestCard({ check, currentUserId, onRespond, onPress }: P
       <View className="gap-1.5">
         {check.participants.map((p) => (
           <View key={p.id} className="flex-row items-center gap-2">
-            <Text className="flex-1 text-text-primary text-[13px]" numberOfLines={1}>
+            <Text className="flex-1 font-sans text-[13px] text-on-surface" numberOfLines={1}>
               {p.user.id === currentUserId ? 'You' : p.user.displayName}
             </Text>
-            <Text className="text-text-primary text-[13px] font-semibold">
+            <Text className="font-sans text-[13px] font-semibold text-on-surface">
               {formatCurrencyCents(p.shareCents, check.currency)}
             </Text>
             <Text className={`text-[11px] font-bold min-w-16 text-right ${statusClass(p.status)}`}>{p.status}</Text>
@@ -62,12 +62,18 @@ export function SplitRequestCard({ check, currentUserId, onRespond, onPress }: P
       {canRespond && (
         <View className="flex-row gap-2 mt-3">
           <View className="flex-1">
-            <Button variant="destructive" loading={busy === 'DECLINED'} disabled={busy !== null} onPress={() => respond('DECLINED')}>
+            <Button
+              size="sm"
+              variant="destructive"
+              loading={busy === 'DECLINED'}
+              disabled={busy !== null}
+              onPress={() => respond('DECLINED')}
+            >
               Decline
             </Button>
           </View>
           <View className="flex-1">
-            <Button variant="primary" loading={busy === 'PAID'} disabled={busy !== null} onPress={() => respond('PAID')}>
+            <Button size="sm" variant="primary" loading={busy === 'PAID'} disabled={busy !== null} onPress={() => respond('PAID')}>
               Mark as Paid
             </Button>
           </View>

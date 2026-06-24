@@ -53,7 +53,7 @@ export default function ChatListPage() {
   };
 
   return (
-    <View className="flex-1 bg-canvas" style={{ minHeight: '100vh' as unknown as number }}>
+    <View className="flex-1 bg-background" style={{ minHeight: '100vh' as unknown as number }}>
       <AppHeader />
 
       <View className="flex-1 w-full max-w-[640px] self-center p-5">
@@ -65,11 +65,11 @@ export default function ChatListPage() {
             Start
           </Button>
         </View>
-        {error && <Text className="text-negative text-[13px] mb-2">{error}</Text>}
+        {error && <Text className="text-error text-[13px] mb-2">{error}</Text>}
 
-        <ScrollView className="flex-1 bg-surface rounded-2xl">
+        <ScrollView className="flex-1 bg-surface-container rounded-2xl">
           {conversations.length === 0 ? (
-            <Text className="p-6 text-center text-text-secondary">No conversations yet. Start one above.</Text>
+            <Text className="p-6 text-center text-on-surface-variant">No conversations yet. Start one above.</Text>
           ) : (
             conversations.map((conversation: Conversation) => {
               const others = otherParticipants(conversation, user.id);
@@ -89,10 +89,10 @@ export default function ChatListPage() {
                     </Text>
                   </View>
                   <View className="flex-1">
-                    <Text className="text-text-primary text-[15px] font-semibold">
+                    <Text className="text-on-background text-[15px] font-semibold">
                       {conversationTitle(conversation, user.id)}
                     </Text>
-                    <Text className="text-text-secondary text-[13px] mt-0.5">
+                    <Text className="text-on-surface-variant text-[13px] mt-0.5">
                       {previewText(conversation.lastMessage)}
                     </Text>
                   </View>

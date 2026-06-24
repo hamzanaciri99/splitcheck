@@ -6,7 +6,7 @@ type Props = ViewProps & {
 
 export function Card({ children, className, ...rest }: Props) {
   return (
-    <View className={`bg-surface rounded-2xl ${className ?? ''}`} {...rest}>
+    <View className={`bg-surface-container border border-outline-variant rounded-xl ${className ?? ''}`} {...rest}>
       {children}
     </View>
   );

@@ -26,16 +26,16 @@ export default function SignupPage() {
   };
 
   return (
-    <View className="flex-1 bg-canvas items-center justify-center p-6" style={{ minHeight: '100vh' as unknown as number }}>
+    <View className="flex-1 bg-background items-center justify-center p-6" style={{ minHeight: '100vh' as unknown as number }}>
       <View className="w-full max-w-[380px] gap-3">
-        <Text className="text-text-primary text-2xl font-extrabold mb-2">Create Account</Text>
+        <Text className="text-on-background text-2xl font-extrabold mb-2">Create Account</Text>
 
         <TextField label="Name" value={displayName} onChangeText={setDisplayName} />
         <TextField label="Email" autoCapitalize="none" value={email} onChangeText={setEmail} />
         <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
-        <Text className="text-text-secondary text-xs -mt-2">At least 8 characters.</Text>
+        <Text className="text-on-surface-variant text-xs -mt-2">At least 8 characters.</Text>
 
-        {error && <Text className="text-negative text-[13px]">{error}</Text>}
+        {error && <Text className="text-error text-[13px]">{error}</Text>}
 
         <View className="mt-1">
           <Button

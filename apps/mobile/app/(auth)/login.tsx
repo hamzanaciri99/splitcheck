@@ -25,9 +25,9 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-canvas">
-      <View className="flex-1 justify-center px-6 gap-3">
-        <Text className="text-text-primary text-2xl font-extrabold mb-3">Sign In</Text>
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-1 justify-center px-gutter gap-3">
+        <Text className="font-jakarta-bold font-bold text-[24px] text-on-background mb-3">Sign In</Text>
 
         <TextField
           label="Email"
@@ -38,7 +38,7 @@ export default function LoginScreen() {
         />
         <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
 
-        {error && <Text className="text-negative text-[13px] text-center">{error}</Text>}
+        {error && <Text className="font-sans text-error text-[13px] text-center">{error}</Text>}
 
         <View className="mt-2">
           <Button variant="primary" fullWidth loading={busy} disabled={busy || !email || !password} onPress={onSubmit}>

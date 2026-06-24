@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Button, Icon } from '@splitcheck/ui';
+import { Button, Icon, BodyMd } from '@splitcheck/ui';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useGoogleAuth } from '@/auth/useGoogleAuth';
 
@@ -24,17 +24,17 @@ export default function WelcomeScreen() {
   }, [response]);
 
   return (
-    <SafeAreaView className="flex-1 bg-canvas">
-      <View className="flex-1 justify-between px-6 pt-20 pb-8">
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-1 justify-between px-gutter pt-20 pb-8">
         <View>
-          <Text className="text-text-primary text-[34px] font-extrabold mb-3">SplitCheck</Text>
-          <Text className="text-text-secondary text-[15px] leading-[22px]">
+          <Text className="font-jakarta-bold font-bold text-[34px] text-on-background mb-3">SplitCheck</Text>
+          <BodyMd className="text-on-surface-variant">
             Track shared checks with friends. No payments here — just keeping it fair.
-          </Text>
+          </BodyMd>
         </View>
 
         <View className="gap-2">
-          {error && <Text className="text-negative text-[13px] mb-1 text-center">{error}</Text>}
+          {error && <Text className="text-error text-[13px] mb-1 text-center font-sans">{error}</Text>}
 
           <Button
             variant="secondary"
@@ -48,7 +48,7 @@ export default function WelcomeScreen() {
           </Button>
 
           {!isConfigured && (
-            <Text className="text-text-secondary text-[11px] text-center mb-1">
+            <Text className="font-sans text-on-surface-variant text-[11px] text-center mb-1">
               Google sign-in needs EXPO_PUBLIC_GOOGLE_CLIENT_ID configured.
             </Text>
           )}

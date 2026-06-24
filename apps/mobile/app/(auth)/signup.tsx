@@ -26,9 +26,9 @@ export default function SignupScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-canvas">
-      <View className="flex-1 justify-center px-6 gap-3">
-        <Text className="text-text-primary text-2xl font-extrabold mb-3">Create Account</Text>
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-1 justify-center px-gutter gap-3">
+        <Text className="font-jakarta-bold font-bold text-[24px] text-on-background mb-3">Create Account</Text>
 
         <TextField label="Name" value={displayName} onChangeText={setDisplayName} />
         <TextField
@@ -39,9 +39,9 @@ export default function SignupScreen() {
           onChangeText={setEmail}
         />
         <TextField label="Password" secureTextEntry value={password} onChangeText={setPassword} />
-        <Text className="text-text-secondary text-xs -mt-2">At least 8 characters.</Text>
+        <Text className="font-sans text-on-surface-variant text-xs -mt-2">At least 8 characters.</Text>
 
-        {error && <Text className="text-negative text-[13px] text-center">{error}</Text>}
+        {error && <Text className="font-sans text-error text-[13px] text-center">{error}</Text>}
 
         <View className="mt-2">
           <Button
