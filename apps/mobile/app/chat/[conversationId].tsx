@@ -7,7 +7,7 @@ import type { Message } from '@splitcheck/core';
 import { useChatStore, conversationTitle } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useSplitDraftStore } from '@/store/useSplitDraftStore';
-import { api, API_URL } from '@/api/client';
+import { API_URL, uploadFile } from '@/api/client';
 import { MessageBubble, SplitRequestCard, IconButton, Icon, TextField } from '@splitcheck/ui';
 
 export default function ChatThreadScreen() {
@@ -54,17 +54,11 @@ export default function ChatThreadScreen() {
   const uploadAsset = async (asset: ImagePicker.ImagePickerAsset) => {
     setUploading(true);
     try {
-      const form = new FormData();
-      form.append('file', {
-        uri: asset.uri,
-        name: asset.fileName ?? 'receipt.jpg',
-        type: asset.mimeType ?? 'image/jpeg',
-      } as unknown as Blob);
-
-      const result = await api.requestForm<{
+      const mimeType = asset.mimeType ?? 'image/jpeg';
+      const result = await uploadFile<{
         message: Message;
         extracted: { merchant: string | null; items: { name: string; priceCents: number }[]; totalCents: number | null } | null;
-      }>(`/api/conversations/${conversationId}/attachments`, form);
+      }>(`/api/conversations/${conversationId}/attachments`, asset.uri, mimeType);
 
       useChatStore.getState().upsertMessage(result.message);
 

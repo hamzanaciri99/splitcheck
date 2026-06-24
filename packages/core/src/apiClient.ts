@@ -54,7 +54,7 @@ export class ApiClient {
     ]);
   }
 
-  private async refreshAccessToken(): Promise<boolean> {
+  async refreshAccessToken(): Promise<boolean> {
     if (!this.refreshPromise) {
       this.refreshPromise = this.doRefresh().finally(() => {
         this.refreshPromise = null;

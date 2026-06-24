@@ -11,6 +11,7 @@ import { authRouter } from './routes/auth';
 import { usersRouter } from './routes/users';
 import { conversationsRouter } from './routes/conversations';
 import { checksRouter } from './routes/checks';
+import { receiptsRouter } from './routes/receipts';
 import { errorHandler } from './middleware/error';
 import { initSocket } from './realtime/socket';
 
@@ -29,6 +30,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/conversations', conversationsRouter);
 app.use('/api', checksRouter);
+app.use('/api', receiptsRouter);
 
 Sentry.setupExpressErrorHandler(app);
 app.use(errorHandler);

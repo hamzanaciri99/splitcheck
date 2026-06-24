@@ -3,42 +3,33 @@ import { View, Text, Pressable, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import { router, useLocalSearchParams } from 'expo-router';
-import type { Message } from '@splitcheck/core';
+import { router } from 'expo-router';
 import { IconButton, Icon, Button } from '@splitcheck/ui';
 import { uploadFile } from '@/api/client';
-import { useChatStore } from '@/store/useChatStore';
-import { useSplitDraftStore } from '@/store/useSplitDraftStore';
+import { useReceiptSplitStore } from '@/store/useReceiptSplitStore';
 
-export default function ScanReceiptScreen() {
-  const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
+export default function StandaloneScanScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [flash, setFlash] = useState<'off' | 'on'>('off');
   const [processing, setProcessing] = useState(false);
   const cameraRef = useRef<CameraView>(null);
-  const initDraft = useSplitDraftStore((s) => s.initDraft);
+  const initFromScan = useReceiptSplitStore((s) => s.initFromScan);
 
   const processAsset = async (uri: string, mimeType: string) => {
     setProcessing(true);
     try {
-      const conversation = useChatStore.getState().conversations.find((c) => c.id === conversationId);
-      if (!conversation) throw new Error('Conversation not found');
-
       const result = await uploadFile<{
-        message: Message;
+        attachmentId: string;
+        url: string;
         extracted: { merchant: string | null; items: { name: string; priceCents: number }[]; totalCents: number | null } | null;
-      }>(`/api/conversations/${conversationId}/attachments`, uri, mimeType);
+      }>('/api/receipts/scan', uri, mimeType);
 
-      useChatStore.getState().upsertMessage(result.message);
-
-      initDraft({
-        conversationId,
+      initFromScan({
         title: result.extracted?.merchant ?? 'Split',
-        participants: conversation.participants,
+        attachmentId: result.attachmentId,
         items: result.extracted?.items ?? [],
-        attachmentId: result.message.attachment?.id ?? null,
       });
-      router.replace(`/new-split/${conversationId}`);
+      router.replace('/split-receipt');
     } catch (err) {
       Alert.alert('Could not process receipt', err instanceof Error ? err.message : 'Please try again');
     } finally {
