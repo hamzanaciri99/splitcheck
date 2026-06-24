@@ -7,6 +7,8 @@ export * from './components/TextField';
 export * from './components/ProgressBar';
 export * from './components/TopAppBar';
 export * from './components/BottomNavBar';
+export * from './components/UserAvatarButton';
+export * from './components/SearchBar';
 export * from './components/ActivityItemRow';
 export * from './components/BalanceBentoSection';
 export * from './components/MessageBubble';

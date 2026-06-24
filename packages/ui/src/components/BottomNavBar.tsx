@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from 'react-native';
 import { Icon, type IconName } from './Icon';
 
-export type NavKey = 'activity' | 'chat' | 'groups' | 'history' | 'profile';
+export type NavKey = 'activity' | 'chat' | 'groups' | 'history';
 
 type NavItem = { key: NavKey; label: string; icon: IconName };
 
@@ -10,11 +10,10 @@ const ITEMS: NavItem[] = [
   { key: 'chat', label: 'Chat', icon: 'chat' },
   { key: 'groups', label: 'Groups', icon: 'users' },
   { key: 'history', label: 'History', icon: 'clock' },
-  { key: 'profile', label: 'Profile', icon: 'user' },
 ];
 
 type Props = {
-  active: NavKey;
+  active?: NavKey | null;
   onPress: (key: NavKey) => void;
 };
 

@@ -38,7 +38,8 @@ export type IconName =
   | 'lightbulb'
   | 'photo-library'
   | 'analytics'
-  | 'person-placeholder';
+  | 'person-placeholder'
+  | 'search';
 
 type Props = {
   name: IconName;
@@ -340,6 +341,13 @@ export function Icon({ name, size = 24, color = '#F5F5F5' }: Props) {
         <Svg {...common}>
           <Circle cx="12" cy="8" r="4" />
           <Path d="M4 21v-1a8 8 0 0 1 16 0v1" />
+        </Svg>
+      );
+    case 'search':
+      return (
+        <Svg {...common}>
+          <Circle cx="11" cy="11" r="7" />
+          <Path d="M21 21l-4.35-4.35" />
         </Svg>
       );
     default:

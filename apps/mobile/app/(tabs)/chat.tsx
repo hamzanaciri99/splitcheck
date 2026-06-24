@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import type { Conversation, Message } from '@splitcheck/core';
 import { useChatStore, conversationTitle, otherParticipants } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { getAvatarInitials } from '@splitcheck/core';
-import { IconButton, Icon } from '@splitcheck/ui';
+import { IconButton, Icon, SearchBar } from '@splitcheck/ui';
 import { AppBottomNav } from '@/components/AppBottomNav';
 
 function previewText(message: Message | null): string {
@@ -19,6 +19,8 @@ function previewText(message: Message | null): string {
 export default function ChatListScreen() {
   const user = useAuthStore((s) => s.user);
   const { conversations, loadConversations, connectSocket } = useChatStore();
+  const { focusSearch } = useLocalSearchParams<{ focusSearch?: string }>();
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     if (!user) return;
@@ -27,6 +29,10 @@ export default function ChatListScreen() {
   }, [user]);
 
   if (!user) return null;
+
+  const filtered = query.trim()
+    ? conversations.filter((c) => conversationTitle(c, user.id).toLowerCase().includes(query.trim().toLowerCase()))
+    : conversations;
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
@@ -37,14 +43,24 @@ export default function ChatListScreen() {
         </IconButton>
       </View>
 
+      <View className="px-gutter mb-3">
+        <SearchBar
+          editable
+          value={query}
+          onChangeText={setQuery}
+          autoFocus={focusSearch === '1'}
+          placeholder="Search conversations"
+        />
+      </View>
+
       <FlatList
-        data={conversations}
+        data={filtered}
         keyExtractor={(item) => item.id}
         contentContainerClassName="pb-24"
         ListEmptyComponent={
           <View className="p-10 items-center">
             <Text className="font-sans text-on-surface-variant text-sm text-center">
-              No conversations yet. Start one with the + button.
+              {query.trim() ? 'No conversations match your search.' : 'No conversations yet. Start one with the + button.'}
             </Text>
           </View>
         }

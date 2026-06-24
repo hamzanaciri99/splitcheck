@@ -95,7 +95,7 @@ export default function ProfileScreen() {
         </View>
       </ScrollView>
 
-      <AppBottomNav active="profile" />
+      <AppBottomNav active={null} />
     </SafeAreaView>
   );
 }

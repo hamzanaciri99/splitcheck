@@ -6,10 +6,9 @@ const ROUTES: Record<NavKey, string> = {
   chat: '/(tabs)/chat',
   groups: '/(tabs)/groups',
   history: '/(tabs)/history',
-  profile: '/(tabs)/profile',
 };
 
-export function AppBottomNav({ active }: { active: NavKey }) {
+export function AppBottomNav({ active }: { active?: NavKey | null }) {
   return (
     <BottomNavBar
       active={active}

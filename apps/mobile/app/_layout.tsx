@@ -52,6 +52,7 @@ function RootLayout() {
         <Stack.Screen name="new-chat" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="new-split/[conversationId]" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="check/[checkId]" options={{ headerShown: false }} />
+        <Stack.Screen name="notifications" options={{ headerShown: false }} />
         <Stack.Screen name="scan/[conversationId]" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
         <Stack.Screen name="scan/index" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
         <Stack.Screen name="split-receipt" options={{ headerShown: false, presentation: 'modal' }} />

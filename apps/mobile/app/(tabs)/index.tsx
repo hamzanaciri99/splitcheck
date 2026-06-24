@@ -4,7 +4,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useSplitStore } from '@/store/useSplitStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import { BalanceBentoSection, ActivityItemRow, TopAppBar, Icon, HeadlineMd, LabelMd } from '@splitcheck/ui';
+import {
+  BalanceBentoSection,
+  ActivityItemRow,
+  Icon,
+  IconButton,
+  SearchBar,
+  UserAvatarButton,
+  HeadlineMd,
+  LabelMd,
+} from '@splitcheck/ui';
 import { AppBottomNav } from '@/components/AppBottomNav';
 
 export default function ActivityScreen() {
@@ -15,11 +24,33 @@ export default function ActivityScreen() {
     if (user) refreshDashboard(user.id);
   }, [user]);
 
+  if (!user) return null;
+
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <TopAppBar onLeftPress={() => {}} onRightPress={() => {}} />
+      <View className="flex-row items-center justify-between px-gutter h-16 bg-surface/70 backdrop-blur-xl border-b border-white/10">
+        <Text className="font-jakarta-bold font-bold text-[17px] text-primary shrink" numberOfLines={1}>
+          SplitCheck
+        </Text>
+        <View className="flex-row items-center gap-2">
+          <IconButton accessibilityLabel="Notifications" size={36} onPress={() => router.push('/notifications')}>
+            <Icon name="bell" size={20} color="#d5e8ec" />
+          </IconButton>
+          <SearchBar
+            editable={false}
+            containerClassName="w-[88px]"
+            onPress={() => router.push('/(tabs)/chat?focusSearch=1')}
+          />
+          <UserAvatarButton
+            displayName={user.displayName}
+            avatarColor={user.avatarColor}
+            size={32}
+            onPress={() => router.push('/(tabs)/profile')}
+          />
+        </View>
+      </View>
 
-      <ScrollView className="flex-1" contentContainerClassName="pt-20 px-gutter pb-32" showsVerticalScrollIndicator={false}>
+      <ScrollView className="flex-1" contentContainerClassName="pt-6 px-gutter pb-32" showsVerticalScrollIndicator={false}>
         <BalanceBentoSection
           totalBalance={dashboard.totalBalance}
           owedToYou={dashboard.owedToYou}
@@ -29,7 +60,9 @@ export default function ActivityScreen() {
 
         <View className="flex-row justify-between items-center mb-stack-md">
           <HeadlineMd className="text-on-surface">Recent Activity</HeadlineMd>
-          <LabelMd className="text-primary">View all</LabelMd>
+          <Pressable onPress={() => router.push('/(tabs)/history')}>
+            <LabelMd className="text-primary">View all</LabelMd>
+          </Pressable>
         </View>
 
         {dashboard.receipts.length === 0 ? (
