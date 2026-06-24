@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import type { Conversation, Message } from '@splitcheck/core';
@@ -21,12 +21,23 @@ export default function ChatListScreen() {
   const { conversations, loadConversations, connectSocket } = useChatStore();
   const { focusSearch } = useLocalSearchParams<{ focusSearch?: string }>();
   const [query, setQuery] = useState('');
+  const searchRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (!user) return;
     connectSocket();
     loadConversations();
   }, [user]);
+
+  // Arriving here from the dashboard's search bar should feel like that
+  // same tap landed on this bar: pop the keyboard immediately, not just
+  // visually focus it.
+  useEffect(() => {
+    if (focusSearch === '1') {
+      const timer = setTimeout(() => searchRef.current?.focus(), 50);
+      return () => clearTimeout(timer);
+    }
+  }, [focusSearch]);
 
   if (!user) return null;
 
@@ -36,21 +47,18 @@ export default function ChatListScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-      <View className="flex-row justify-between items-center px-gutter py-3">
-        <Text className="font-jakarta-bold font-bold text-[22px] text-on-background">Chats</Text>
-        <IconButton accessibilityLabel="New chat" onPress={() => router.push('/new-chat')}>
-          <Icon name="plus" size={20} color="#d5e8ec" />
-        </IconButton>
-      </View>
-
-      <View className="px-gutter mb-3">
+      <View className="flex-row items-center gap-2.5 px-gutter h-16 bg-surface/70 backdrop-blur-xl border-b border-white/10">
         <SearchBar
+          ref={searchRef}
           editable
           value={query}
           onChangeText={setQuery}
-          autoFocus={focusSearch === '1'}
+          containerClassName="flex-1"
           placeholder="Search conversations"
         />
+        <IconButton accessibilityLabel="New chat" size={36} onPress={() => router.push('/new-chat')}>
+          <Icon name="plus" size={20} color="#d5e8ec" />
+        </IconButton>
       </View>
 
       <FlatList

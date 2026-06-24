@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { View, TextInput, Pressable, Text, type TextInputProps } from 'react-native';
 import { Icon } from './Icon';
 
@@ -8,15 +9,10 @@ type Props = Omit<TextInputProps, 'onPress'> & {
   containerClassName?: string;
 };
 
-export function SearchBar({
-  editable = true,
-  onPress,
-  placeholder = 'Search',
-  value,
-  onChangeText,
-  containerClassName,
-  ...rest
-}: Props) {
+export const SearchBar = forwardRef<TextInput, Props>(function SearchBar(
+  { editable = true, onPress, placeholder = 'Search', value, onChangeText, containerClassName, ...rest },
+  ref
+) {
   if (!editable) {
     return (
       <Pressable
@@ -42,6 +38,7 @@ export function SearchBar({
     >
       <Icon name="search" size={16} color="#bacbb9" />
       <TextInput
+        ref={ref}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
@@ -51,4 +48,4 @@ export function SearchBar({
       />
     </View>
   );
-}
+});
